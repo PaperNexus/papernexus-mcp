@@ -1,0 +1,47 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install check-jsonschema
+        run: pip install check-jsonschema==0.29.4
+      - name: Every JSON file parses
+        run: |
+          find . -name '*.json' -not -path './.git/*' -print0 | xargs -0 -n1 python -m json.tool > /dev/null
+      - name: server.json matches the MCP Registry schema
+        run: |
+          check-jsonschema --schemafile "$(python -c 'import json; print(json.load(open("server.json"))["$schema"])')" server.json
+      - name: Every manifest names the same server URL
+        run: |
+          url=https://papernex.us/mcp
+          python - "$url" <<'PY'
+          import json, sys
+          url = sys.argv[1]
+          found = {
+              "server.json": json.load(open("server.json"))["remotes"][0]["url"],
+              ".mcp.json": json.load(open(".mcp.json"))["mcpServers"]["papernexus"]["url"],
+              "gemini-extension.json": json.load(open("gemini-extension.json"))["mcpServers"]["papernexus"]["httpUrl"],
+          }
+          wrong = {name: value for name, value in found.items() if value != url}
+          if wrong:
+              sys.exit(f"Server URL differs from {url}: {wrong}")
+          versions = {
+              "server.json": json.load(open("server.json"))["version"],
+              ".claude-plugin/plugin.json": json.load(open(".claude-plugin/plugin.json"))["version"],
+              "gemini-extension.json": json.load(open("gemini-extension.json"))["version"],
+          }
+          if len(set(versions.values())) != 1:
+              sys.exit(f"Versions differ: {versions}")
+          PY

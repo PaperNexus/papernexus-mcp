@@ -1,0 +1,10 @@
+{
+  "name": "papernexus",
+  "version": "1.0.0",
+  "description": "Find related scientific papers through the citation network of 225 million scholarly works.",
+  "mcpServers": {
+    "papernexus": {
+      "httpUrl": "https://papernex.us/mcp"
+    }
+  }
+}

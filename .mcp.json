@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "papernexus": {
+      "type": "http",
+      "url": "https://papernex.us/mcp"
+    }
+  }
+}

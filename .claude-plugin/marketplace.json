@@ -1,0 +1,14 @@
+{
+  "name": "papernexus",
+  "description": "Paper Nexus: find related scientific papers through their citation network.",
+  "owner": {
+    "name": "Paper Nexus",
+    "email": "info@papernex.us"
+  },
+  "plugins": [
+    {
+      "name": "papernexus",
+      "source": "./"
+    }
+  ]
+}

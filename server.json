@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.PaperNexus/papernexus",
+  "title": "Paper Nexus",
+  "description": "Find related scientific papers through the citation network of 225 million scholarly works.",
+  "version": "1.0.0",
+  "websiteUrl": "https://papernex.us",
+  "repository": {
+    "url": "https://github.com/PaperNexus/papernexus-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://papernex.us/logo512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    },
+    {
+      "src": "https://papernex.us/favicon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://papernex.us/mcp"
+    }
+  ]
+}
