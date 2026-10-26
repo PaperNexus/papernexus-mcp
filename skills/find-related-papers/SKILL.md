@@ -19,25 +19,27 @@ builds on, including ones that use different words for the same idea.
    titles before going on, and ask the user when two or more could be the one.
 2. **Get recommendations.** Call `recommend_papers` with one or more ids.
    Several origins find papers related to all of them, which is the way to
-   bring two lines of work together ("papers that connect X and Y"). If the
-   tool offers `filters` (years, citation counts, authors, venues, open
-   access, document types), pass the user's constraints there instead of
-   filtering the results yourself: the search goes deeper to fill the list.
+   bring two lines of work together ("papers that connect X and Y"). Pass the
+   user's constraints in `filters` (years, citation counts, authors, venues,
+   open access, document types) instead of filtering the results yourself:
+   the search goes deeper to fill the list. Filters are a Premium feature; on
+   a free account the tool says so.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details and its
-   most-cited references (where a paper comes from). `list_citing_papers`,
-   where offered, lists the papers citing it, newest or most cited first (where
+   most-cited references (where a paper comes from). `list_citing_papers`
+   lists the papers citing it, newest or most cited first (where
    a paper went next).
 4. **Answer with links.** Every paper in a result has a papernex.us `url`; give
    it beside each paper you mention, and give `graph_url` so the user can open
    the whole graph in Paper Nexus and explore it visually.
 
 When you only need some details of each paper, say titles and years to scan
-a long list, pass `fields` where the tool offers it: the result stays short,
+a long list, pass `fields`: the result stays short,
 and every paper still carries its id for the next call.
 
-If the user has connected their library (`list_library` is offered), their
-collections are a good source of origin papers: "find what I'm missing for my
-thesis chapter" means list that collection, then recommend from its papers.
+If the user allowed library access when connecting (`list_library` is
+listed), their collections are a good source of origin papers: "find what I'm
+missing for my thesis chapter" means list that collection, then recommend from
+its papers.
 
 ## Allowance
 
@@ -48,8 +50,7 @@ how many are left and plan within them.
 
 - **Free accounts:** 10 counted calls a week, and up to 2 origin papers per
   recommendation.
-- **Premium:** 200 counted calls a day, up to 10 origin papers, and filters
-  where the tool offers them.
+- **Premium:** 200 counted calls a day, up to 10 origin papers, and filters.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.

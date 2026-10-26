@@ -117,11 +117,10 @@ on.
 | `get_paper` | One paper's details and its most-cited references |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
-| `list_citing_papers` | The papers citing one paper (rolling out) |
+| `list_citing_papers` | The papers citing one paper |
 
 `recommend_papers` also takes filters (years, citation counts, authors,
-venues, open access, document types) on Premium accounts where they are
-offered (rolling out).
+venues, open access, document types) on Premium accounts.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
@@ -135,7 +134,7 @@ left.
 | Plan | Counted calls | Origin papers per recommendation |
 |---|---|---|
 | Free | 10 a week | up to 2 |
-| Premium | 200 a day | up to 10, plus filters (rolling out) |
+| Premium | 200 a day | up to 10, plus filters |
 
 A call that fails or finds nothing isn't counted. See
 [pricing](https://papernex.us/pricing) for Premium.

@@ -14,18 +14,18 @@ isn't part of a listed paper, such as `graph_url`, totals and cursors. Leave
 `fields` out for every field. Each tool's table below lists the fields it
 offers.
 
-Which tools you see depends on your account and on what you allowed when you
+What you can use depends on your plan and on what you allowed when you
 connected:
 
-| Tool | Offered | Counts against the allowance |
+| Tool | Available to | Counts against the allowance |
 |---|---|---|
-| `search_papers` | Always | No |
-| `recommend_papers` | Always | Yes |
-| `get_paper` | Always | No |
-| `get_usage` | Always | No |
-| `list_library` | When you allow "Read your library" while connecting | No |
-| `list_citing_papers` | Rolling out; not yet offered on every account | Yes |
-| `recommend_papers` `filters` | Rolling out, Premium; not yet offered on every account | Yes |
+| `search_papers` | Every account | No |
+| `recommend_papers` | Every account | Yes |
+| `recommend_papers` `filters` | Premium | Yes |
+| `get_paper` | Every account | No |
+| `get_usage` | Every account | No |
+| `list_citing_papers` | Every account | Yes |
+| `list_library` | Every account, when you allow "Read your library" while connecting | No |
 
 See [Allowance](../README.md#allowance) for the limits.
 
@@ -56,7 +56,7 @@ Several origins find papers related to all of them.
 | `papers` | array of strings, required | 1–10 Paper Nexus ids or links. Free accounts combine up to 2. |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the origins as well as the recommendations. |
-| `filters` | object | Where offered; see below |
+| `filters` | object | Premium; see below |
 
 Returns `origins` (the papers you passed), `recommendations`, most related
 first, `not_found` (ids that aren't Paper Nexus papers), and `graph_url`, which
@@ -66,8 +66,9 @@ opens the whole graph on papernex.us. Each paper has `id`, `title`, `authors`
 
 ### Filters
 
-Where `filters` is offered, every recommended paper passes all the filters
-given. The search goes deeper than plain recommendations to fill the list, so
+With `filters`, every recommended paper passes all the filters given. Filters
+are a Premium feature; a free account that sends them is told so, and the call
+isn't counted. The search goes deeper than plain recommendations to fill the list, so
 pass filters here rather than filtering the results yourself.
 
 | Filter | Type | Notes |
@@ -117,7 +118,7 @@ UTC; null when none is open, and the next counted call opens one) and
 
 ## `list_citing_papers`
 
-The papers that cite one paper. Rolling out; not yet offered on every account.
+The papers that cite one paper, newest, earliest or most cited first.
 
 | Argument | Type | Notes |
 |---|---|---|

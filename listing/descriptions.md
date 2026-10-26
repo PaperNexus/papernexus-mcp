@@ -33,14 +33,17 @@ assistant to:
   the citation network (cited alongside, citing the same work), not similar
   wording, so it finds the papers a field builds on even when they use
   different words. Several papers together find the work that connects them.
-- **Read a paper's details** and its most-cited references.
+- **Read a paper's details** and its most-cited references, and see the
+  papers that cite it.
+- **Narrow recommendations with filters** (Premium): years, citation counts,
+  authors, venues, open access and document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your
   collections are missing.
 
 Every paper links to papernex.us, and every set of recommendations comes with
 a link that opens the whole citation graph there. Sign in with a free Paper
-Nexus account: 10 recommendations a week, no API key. Premium has 200 a day
-and up to 10 papers per request.
+Nexus account: 10 recommendations a week, no API key. Premium has 200 a day,
+up to 10 papers per request, and filters.
 
 ## Categories
 
