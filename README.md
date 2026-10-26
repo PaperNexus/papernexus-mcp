@@ -120,7 +120,8 @@ on.
 
 `recommend_papers` also takes filters (years, citation counts, authors,
 venues, open access, document types) on accounts where they are offered.
-Arguments and results are in the [tool reference](docs/tools.md). Every tool
+Every tool that lists papers takes `fields`, to return only the details you
+need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
 
 ## Allowance

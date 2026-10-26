@@ -6,6 +6,14 @@ list for the model, and the same data as structured content. A paper id is a
 6-character Paper Nexus id such as `0Bwo97`; wherever a tool takes one, a
 `papernex.us/paper/<id>` link works too.
 
+Every tool that lists papers takes `fields`: the names of the paper fields to
+return, such as `["title", "year"]`, to keep a long result short. It cuts each
+listed paper in the text and the structured content alike. A paper's `id`
+always comes back, since the other tools take it, and so does everything that
+isn't part of a listed paper, such as `graph_url`, totals and cursors. Leave
+`fields` out for every field. Each tool's table below lists the fields it
+offers.
+
 Which tools you see depends on your account and on what you allowed when you
 connected:
 
@@ -28,6 +36,7 @@ Find papers by title and get their Paper Nexus ids.
 |---|---|---|
 | `query` | string, required | A title or part of one, a DOI, or a link to a paper (doi.org, arXiv, PubMed, publisher pages). At most 512 characters. |
 | `limit` | integer | 1–20, default 10 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `doi`, `url` |
 
 Returns `results`: up to `limit` papers, best match first, each with `id`,
 `title`, `authors` (the first three), `year`, `doi` and `url`. When nothing
@@ -45,6 +54,7 @@ Several origins find papers related to all of them.
 |---|---|---|
 | `papers` | array of strings, required | 1–10 Paper Nexus ids or links. Free accounts combine up to 2. |
 | `limit` | integer | 1–50, default 25 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the origins as well as the recommendations. |
 | `filters` | object | Where offered; see below |
 
 Returns `origins` (the papers you passed), `recommendations`, most related
@@ -70,10 +80,10 @@ pass filters here rather than filtering the results yourself.
 | `cites` + `cites_match` | array, up to 3; `any` or `all` | Keep papers that cite these papers |
 | `cited_by` + `cited_by_match` | array, up to 3; `any` or `all` | Keep papers that these papers cite |
 
-A filtered result adds `rank` to each recommendation, `matches_filters` to each
-origin, `filters` (the filters as understood), and `filter_summary`, which says
-when fewer papers passed than were asked for. Its `graph_url` reopens the same
-filtered graph.
+A filtered result adds `rank` to each recommendation and `matches_filters` to
+each origin, whatever `fields` asks for, plus `filters` (the filters as
+understood) and `filter_summary`, which says when fewer papers passed than
+were asked for. Its `graph_url` reopens the same filtered graph.
 
 ## `get_paper`
 
@@ -83,6 +93,7 @@ One paper's details and its most-cited references.
 |---|---|---|
 | `paper` | string, required | A Paper Nexus id or link |
 | `references` | integer | How many references to list, most cited first: 0–50, default 10 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the references only; the paper itself always comes back whole. |
 
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 `cited_by_count`, `reference_count`, `open_access`, `url`, `graph_url`),
@@ -100,6 +111,7 @@ The papers that cite one paper. Rolling out; not yet offered on every account.
 | `year_from`, `year_to` | integer | Only citing papers published in this span |
 | `offset` | integer | 0–1000, default 0 |
 | `limit` | integer | 1–50, default 25 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `url` |
 
 Returns `results` (`id`, `title`, `authors`, `year`, `venue`, `doi`,
 `cited_by_count`, `url`), `total` (citing papers in Paper Nexus, or null when
@@ -116,6 +128,7 @@ library" while connecting; it can read your library and never change it.
 | `collection` | string | A collection's name, path ("Thesis / Methods") or id. Without it, the first page lists your collections and your first papers. |
 | `cursor` | string | `next_cursor` from the previous page |
 | `limit` | integer | 1–100, default 50 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `url`, `collections` |
 
 Returns `items` (each paper's `id`, `title`, `authors`, `year`, `venue`, `doi`,
 `url` and the `collections` it is in), `next_cursor` (null on the last page),

@@ -31,6 +31,10 @@ builds on, including ones that use different words for the same idea.
    it beside each paper you mention, and give `graph_url` so the user can open
    the whole graph in Paper Nexus and explore it visually.
 
+When you only need some details of each paper, say titles and years to scan
+a long list, pass `fields` where the tool offers it: the result stays short,
+and every paper still carries its id for the next call.
+
 If the user has connected their library (`list_library` is offered), their
 collections are a good source of origin papers: "find what I'm missing for my
 thesis chapter" means list that collection, then recommend from its papers.
