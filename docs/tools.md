@@ -17,17 +17,19 @@ offers.
 What you can use depends on your plan and on what you allowed when you
 connected:
 
-| Tool | Available to | Counts against the allowance |
+| Tool | Available to | Counts against |
 |---|---|---|
-| `search_papers` | Every account | No |
-| `recommend_papers` | Every account | Yes |
-| `recommend_papers` `filters` | Premium | Yes |
-| `get_paper` | Every account | No |
-| `get_usage` | Every account | No |
-| `list_citing_papers` | Every account | Yes |
-| `list_library` | Every account, when you allow "Read your library" while connecting | No |
+| `search_papers` | Every account | Lookups |
+| `recommend_papers` | Every account | The allowance |
+| `recommend_papers` `filters` | Premium | The allowance |
+| `get_paper` | Every account | Lookups |
+| `get_usage` | Every account | Lookups |
+| `list_citing_papers` | Every account | The allowance |
+| `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
 
-See [Allowance](../README.md#allowance) for the limits.
+Every call also counts toward a limit of 30 calls a minute. Past a limit, the
+tool answers with an error naming the limit and when it resets. See
+[Allowance](../README.md#allowance) for the limits.
 
 ## `search_papers`
 
@@ -101,20 +103,21 @@ Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 `cited_by_count`, `reference_count`, `open_access`, `url`, `graph_url`),
 `references`, and `references_indexed` (how many of its references are papers
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
-Nexus keeps a paper's first five authors. Not counted, and not saved to your
-history.
+Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,
+and isn't saved to your history.
 
 ## `get_usage`
 
-How many counted calls your account has left. Call it before a task that needs
-many `recommend_papers` or `list_citing_papers` calls, to plan within the
-allowance instead of running into it. It takes no arguments and isn't counted
-itself.
+How many calls your account has left. Call it before a task that needs many
+calls, to plan within the limits instead of running into them. It takes no
+arguments. It isn't counted against the allowance, but it uses one lookup.
 
 Returns `tier` (`free` or `premium`), `usage_period` (`weekly` or `daily`),
 `limit`, `used`, `remaining`, `resets_at` (when the current window ends, in
 UTC; null when none is open, and the next counted call opens one) and
-`counted_tools` (the counted tools your account sees).
+`counted_tools` (the counted tools your account sees), plus `lookups` (`limit`,
+`used`, `remaining`, `resets_at` and `tools`, the daily limit the other tools
+share) and `calls_per_minute`.
 
 ## `list_citing_papers`
 

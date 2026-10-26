@@ -127,16 +127,16 @@ is read-only.
 
 ## Allowance
 
-`recommend_papers` and `list_citing_papers` count against your allowance;
-the other tools don't, and `get_usage` tells your assistant how many calls are
-left.
+`recommend_papers` and `list_citing_papers` count against your allowance.
+The other tools share a larger daily limit of lookups, and every tool a limit
+of 30 calls a minute. `get_usage` tells your assistant how many calls are left.
 
-| Plan | Counted calls | Origin papers per recommendation |
-|---|---|---|
-| Free | 10 a week | up to 2 |
-| Premium | 200 a day | up to 10, plus filters |
+| Plan | Counted calls | Lookups | Origin papers per recommendation |
+|---|---|---|---|
+| Free | 10 a week | 100 a day | up to 2 |
+| Premium | 200 a day | 1,000 a day | up to 10, plus filters |
 
-A call that fails or finds nothing isn't counted. See
+A recommendation or citing list that fails or finds nothing isn't counted. See
 [pricing](https://papernex.us/pricing) for Premium.
 
 ## Privacy and access

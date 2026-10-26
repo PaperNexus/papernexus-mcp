@@ -51,6 +51,9 @@ how many are left and plan within them.
 - **Free accounts:** 10 counted calls a week, and up to 2 origin papers per
   recommendation.
 - **Premium:** 200 counted calls a day, up to 10 origin papers, and filters.
+- **Lookups:** the other tools share 100 calls a day (free) or 1,000
+  (Premium), and every tool a limit of 30 calls a minute, so don't loop over
+  `get_paper` for a long list when `fields` on one listing gives what you need.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.
