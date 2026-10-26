@@ -57,4 +57,5 @@ only, never in this repository.
 
 First release: search papers by title, DOI or link; recommendations from one
 or more papers through the citation network; a paper's details and most-cited
-references; and read-only access to your Paper Nexus library.
+references; your remaining allowance; and read-only access to your Paper Nexus
+library. Every tool that lists papers can return only the fields asked for.

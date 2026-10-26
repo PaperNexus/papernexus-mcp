@@ -115,11 +115,13 @@ on.
 | `search_papers` | Find a paper by its title, a DOI or a link, and get its Paper Nexus id |
 | `recommend_papers` | Papers related to one or more papers through their citation network |
 | `get_paper` | One paper's details and its most-cited references |
+| `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
 | `list_citing_papers` | The papers citing one paper (rolling out) |
 
 `recommend_papers` also takes filters (years, citation counts, authors,
-venues, open access, document types) on accounts where they are offered.
+venues, open access, document types) on Premium accounts where they are
+offered (rolling out).
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
@@ -127,12 +129,13 @@ is read-only.
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against your allowance;
-`search_papers`, `get_paper` and `list_library` don't.
+the other tools don't, and `get_usage` tells your assistant how many calls are
+left.
 
 | Plan | Counted calls | Origin papers per recommendation |
 |---|---|---|
 | Free | 10 a week | up to 2 |
-| Premium | 200 a day | up to 10, plus filters |
+| Premium | 200 a day | up to 10, plus filters (rolling out) |
 
 A call that fails or finds nothing isn't counted. See
 [pricing](https://papernex.us/pricing) for Premium.

@@ -42,7 +42,9 @@ thesis chapter" means list that collection, then recommend from its papers.
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against the account's
-allowance; `search_papers`, `get_paper` and `list_library` don't.
+allowance; the other tools don't. Before a task that needs many counted calls,
+such as recommending from every paper in a collection, call `get_usage` to see
+how many are left and plan within them.
 
 - **Free accounts:** 10 counted calls a week, and up to 2 origin papers per
   recommendation.
@@ -51,8 +53,8 @@ allowance; `search_papers`, `get_paper` and `list_library` don't.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.
-When a limit is reached, the tool says so and gives the upgrade link; pass it
-on rather than retrying.
+When a limit is reached, the tool says so and when it resets, and a free
+account also gets the upgrade link; pass that on rather than retrying.
 
 ## Don'ts
 

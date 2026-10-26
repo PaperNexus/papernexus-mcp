@@ -22,6 +22,7 @@ connected:
 | `search_papers` | Always | No |
 | `recommend_papers` | Always | Yes |
 | `get_paper` | Always | No |
+| `get_usage` | Always | No |
 | `list_library` | When you allow "Read your library" while connecting | No |
 | `list_citing_papers` | Rolling out; not yet offered on every account | Yes |
 | `recommend_papers` `filters` | Rolling out, Premium; not yet offered on every account | Yes |
@@ -75,8 +76,8 @@ pass filters here rather than filtering the results yourself.
 | `min_citations`, `max_citations` | integer ≥ 0 | Citation count range |
 | `open_access` | boolean | Only papers free to read |
 | `types` | array | Any of `article`, `preprint`, `review`, `book`, `dissertation`, `report`, `letter`, `dataset`, `conference-paper`, `data-paper`, `software-paper` |
-| `venues` | array, up to 5 | Journals or conferences: a full name, two or more words of one ("Physical Review"), or an acronym ("CVPR", "PNAS") |
-| `authors` + `authors_match` | array, up to 5; `any` or `all` | "Geoffrey Hinton" or "Hinton G"; accents and case are ignored |
+| `venues` | array, up to 5 | Journals or conferences, any of which may match: a full name, two or more words of one ("Physical Review"), or an acronym ("CVPR", "PNAS"). A single word matches only a venue of that name. Each up to 100 characters. |
+| `authors` + `authors_match` | array, up to 5; `any` or `all` | "Geoffrey Hinton" or "Hinton G"; accents and case are ignored. Each up to 100 characters. |
 | `cites` + `cites_match` | array, up to 3; `any` or `all` | Keep papers that cite these papers |
 | `cited_by` + `cited_by_match` | array, up to 3; `any` or `all` | Keep papers that these papers cite |
 
@@ -98,7 +99,21 @@ One paper's details and its most-cited references.
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 `cited_by_count`, `reference_count`, `open_access`, `url`, `graph_url`),
 `references`, and `references_indexed` (how many of its references are papers
-in Paper Nexus). Paper Nexus keeps a paper's first five authors.
+in Paper Nexus). Each reference has the same fields as a recommendation. Paper
+Nexus keeps a paper's first five authors. Not counted, and not saved to your
+history.
+
+## `get_usage`
+
+How many counted calls your account has left. Call it before a task that needs
+many `recommend_papers` or `list_citing_papers` calls, to plan within the
+allowance instead of running into it. It takes no arguments and isn't counted
+itself.
+
+Returns `tier` (`free` or `premium`), `usage_period` (`weekly` or `daily`),
+`limit`, `used`, `remaining`, `resets_at` (when the current window ends, in
+UTC; null when none is open, and the next counted call opens one) and
+`counted_tools` (the counted tools your account sees).
 
 ## `list_citing_papers`
 
@@ -113,10 +128,13 @@ The papers that cite one paper. Rolling out; not yet offered on every account.
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `url` |
 
-Returns `results` (`id`, `title`, `authors`, `year`, `venue`, `doi`,
-`cited_by_count`, `url`), `total` (citing papers in Paper Nexus, or null when
-not known exactly), `complete`, and `next_offset` for the next page (null on
-the last one).
+Returns `results` (`id`, `title`, `authors` (the first three), `year`, `venue`,
+`doi`, `cited_by_count`, `url`), `total` (citing papers in Paper Nexus, or null
+when not known exactly), `complete`, `sort`, `offset`, and `next_offset` for the
+next page (null on the last one). `total` counts the citing papers Paper Nexus
+holds, so it can be lower than a paper's `cited_by_count`. With `year_from` or
+`year_to`, a year with many citing papers may list only its most cited ones;
+the text names those years, and `complete` is then false.
 
 ## `list_library`
 
@@ -130,9 +148,12 @@ library" while connecting; it can read your library and never change it.
 | `limit` | integer | 1–100, default 50 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `url`, `collections` |
 
-Returns `items` (each paper's `id`, `title`, `authors`, `year`, `venue`, `doi`,
-`url` and the `collections` it is in), `next_cursor` (null on the last page),
-and on a first page without a collection, `collections` and `counts`. With a
+Returns `items` (each paper's `id`, `title`, `authors` (the first three),
+`year`, `venue`, `doi`, `url` and the paths of the `collections` it is in),
+`next_cursor` (null on the last page), and `collection` when you asked for
+one. A first page without a collection also has `counts` (`papers` and
+`collections`) and `collections`: each one's `id`, `name`, `path` and whether
+it is `monitored` for new citing papers. With a
 collection, only the papers directly in it are listed, not those in its
 subcollections. A paper you imported that matched nothing in Paper Nexus has a
 null `id`.

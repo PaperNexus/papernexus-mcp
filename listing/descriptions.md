@@ -39,8 +39,8 @@ assistant to:
 
 Every paper links to papernex.us, and every set of recommendations comes with
 a link that opens the whole citation graph there. Sign in with a free Paper
-Nexus account: 10 recommendations a week, no API key. Premium has 200 a day,
-up to 10 papers per request, and filters.
+Nexus account: 10 recommendations a week, no API key. Premium has 200 a day
+and up to 10 papers per request.
 
 ## Categories
 
