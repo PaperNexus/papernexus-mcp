@@ -18,8 +18,8 @@ Find related scientific papers through the citation network of 225 million schol
 ## Short description (about 200 characters)
 
 Search 225 million scholarly works and find related papers through their
-citation network. Recommendations from one or more papers, a paper's key
-references, and your Paper Nexus library.
+citation network: recommendations from one or more papers, a paper's key
+references and citing papers, and your library.
 
 ## Long description
 
