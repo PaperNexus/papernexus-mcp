@@ -11,7 +11,7 @@
 ---
 
 [Paper Nexus](https://papernex.us) maps the scientific literature by its
-citations: 225 million scholarly works from OpenAlex and Semantic Scholar.
+citations, using the scholarly works in OpenAlex and Semantic Scholar.
 This repository holds its [MCP](https://modelcontextprotocol.io) server's
 public definition: the connection details, a Claude Code plugin, a Gemini CLI
 extension, the MCP Registry entry, and the tool reference. The server itself

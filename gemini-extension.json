@@ -1,7 +1,7 @@
 {
   "name": "papernexus",
   "version": "1.0.0",
-  "description": "Find related scientific papers through the citation network of 225 million scholarly works.",
+  "description": "Find related scientific papers through their citation network, from OpenAlex and Semantic Scholar.",
   "mcpServers": {
     "papernexus": {
       "httpUrl": "https://papernex.us/mcp"

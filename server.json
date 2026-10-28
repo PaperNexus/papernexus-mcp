@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.PaperNexus/papernexus",
   "title": "Paper Nexus",
-  "description": "Find related scientific papers through the citation network of 225 million scholarly works.",
+  "description": "Find related scientific papers through their citation network, from OpenAlex and Semantic Scholar.",
   "version": "1.0.0",
   "websiteUrl": "https://papernex.us",
   "repository": {

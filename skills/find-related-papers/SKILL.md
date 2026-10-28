@@ -5,8 +5,8 @@ description: Find scientific papers related to ones the user names, through thei
 
 # Find related papers with Paper Nexus
 
-Paper Nexus finds related papers through the citation network of 225 million
-scholarly works (OpenAlex and Semantic Scholar). Related means cited alongside the
+Paper Nexus finds related papers through the citation network of the
+scholarly works in OpenAlex and Semantic Scholar. Related means cited alongside the
 origins or citing the same work, not "similar text". That makes it good at finding the papers a field actually
 builds on, including ones that use different words for the same idea.
 

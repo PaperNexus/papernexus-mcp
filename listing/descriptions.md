@@ -13,18 +13,18 @@ https://papernex.us/mcp (Streamable HTTP, OAuth 2.1)
 
 ## Tagline (100 characters or fewer)
 
-Find related scientific papers through the citation network of 225 million scholarly works.
+Find related scientific papers through their citation network, from OpenAlex and Semantic Scholar.
 
 ## Short description (about 200 characters)
 
-Search 225 million scholarly works and find related papers through their
+Search the scholarly literature and find related papers through their
 citation network: recommendations from one or more papers, a paper's key
 references and citing papers, and your library.
 
 ## Long description
 
-Paper Nexus maps the scientific literature by its citations, using 225 million
-scholarly works from OpenAlex and Semantic Scholar. Connect it to your
+Paper Nexus maps the scientific literature by its citations, using the
+scholarly works in OpenAlex and Semantic Scholar. Connect it to your
 assistant to:
 
 - **Find a paper** by its title, a DOI, or a link to arXiv, PubMed, doi.org or a
