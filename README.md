@@ -120,7 +120,8 @@ on.
 | `list_citing_papers` | The papers citing one paper |
 
 `recommend_papers` also takes filters (years, citation counts, authors,
-venues, open access, document types) on Premium accounts.
+venues, title words, citing or cited papers, open access, document types) on
+Premium accounts.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.

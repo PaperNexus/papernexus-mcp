@@ -51,7 +51,11 @@ empty or partial answer.
 
 Papers related to one or more origin papers, found through their citation
 network: papers cited alongside them, and papers that cite the same work.
-Several origins find papers related to all of them.
+Several origins merge their related papers, with papers related to more than
+one of them first. Origins from unrelated fields give a mix of each field's
+papers, not papers bridging them; to keep only papers linked to every origin,
+pass the origins as `filters.cites` with `cites_match: "all"`, or narrow by
+topic with `filters.title`.
 
 | Argument | Type | Notes |
 |---|---|---|
@@ -81,13 +85,22 @@ pass filters here rather than filtering the results yourself.
 | `types` | array | Any of `article`, `preprint`, `review`, `book`, `dissertation`, `report`, `letter`, `dataset`, `conference-paper`, `data-paper`, `software-paper` |
 | `venues` | array, up to 5 | Journals or conferences, any of which may match: a full name, two or more words of one ("Physical Review"), or an acronym ("CVPR", "PNAS"). A single word matches only a venue of that name. Each up to 100 characters. |
 | `authors` + `authors_match` | array, up to 5; `any` or `all` | "Geoffrey Hinton" or "Hinton G"; accents and case are ignored. Each up to 100 characters. |
+| `title` + `title_match` | array, up to 5; `any` or `all` | Words or phrases the title must contain, such as "QROM" or "surface code". They match whole words, so QROM doesn't match QROMs; case, accents and punctuation are ignored. Each up to 100 characters. Pair it with `cites` to find the papers citing a paper that are about one topic. |
 | `cites` + `cites_match` | array, up to 3; `any` or `all` | Keep papers that cite these papers |
 | `cited_by` + `cited_by_match` | array, up to 3; `any` or `all` | Keep papers that these papers cite |
 
 A filtered result adds `rank` to each recommendation and `matches_filters` to
 each origin, whatever `fields` asks for, plus `filters` (the filters as
-understood) and `filter_summary`, which says when fewer papers passed than
-were asked for. Its `graph_url` reopens the same filtered graph.
+understood) and `filter_summary`. Its `graph_url` reopens the same filtered
+graph.
+
+`filter_summary` has `requested` (papers the search tried to find),
+`returned` (papers it found that pass), `checked` (nearby papers it checked
+against the filters), `budget_hit` (true when the list is short because the
+search reached the most papers it checks, so more that pass may exist further
+out), `deadline_hit` (the search ran out of time), `matched` (the author and
+venue names each filter matched) and `notes` (why the list is short, if it
+is, and anything else to know).
 
 ## `get_paper`
 
@@ -100,7 +113,8 @@ One paper's details and its most-cited references.
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the references only; the paper itself always comes back whole. |
 
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
-`cited_by_count`, `reference_count`, `open_access`, `url`, `graph_url`),
+`arxiv_id`, `cited_by_count`, `reference_count`, `open_access`, `url`,
+`graph_url`),
 `references`, and `references_indexed` (how many of its references are papers
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
 Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,

@@ -32,11 +32,13 @@ assistant to:
 - **Get related papers** from one paper or several. Related means connected in
   the citation network (cited alongside, citing the same work), not similar
   wording, so it finds the papers a field builds on even when they use
-  different words. Several papers together find the work that connects them.
+  different words. Several papers together put the work related to more than
+  one of them first.
 - **Read a paper's details** and its most-cited references, and see the
   papers that cite it.
 - **Narrow recommendations with filters** (Premium): years, citation counts,
-  authors, venues, open access and document types.
+  authors, venues, title words, citing or cited papers, open access and
+  document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your
   collections are missing.
 

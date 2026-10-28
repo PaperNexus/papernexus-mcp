@@ -18,14 +18,18 @@ builds on, including ones that use different words for the same idea.
    means. If `closest_matches` is true, nothing matched every word: check the
    titles before going on, and ask the user when two or more could be the one.
 2. **Get recommendations.** Call `recommend_papers` with one or more ids.
-   Several origins find papers related to all of them, which is the way to
-   bring two lines of work together ("papers that connect X and Y"). Pass the
-   user's constraints in `filters` (years, citation counts, authors, venues,
-   open access, document types) instead of filtering the results yourself:
-   the search goes deeper to fill the list. Filters are a Premium feature; on
-   a free account the tool says so.
-3. **Go deeper where it helps.** `get_paper` gives one paper's details and its
-   most-cited references (where a paper comes from). `list_citing_papers`
+   Several origins merge their related papers, with papers related to more
+   than one of them first. Origins from unrelated fields give a mix of each
+   field's papers, not papers bridging them. Pass the user's constraints in
+   `filters` (years, citation counts, authors, venues, title words, citing or
+   cited papers, open access, document types) instead of filtering the
+   results yourself: the search goes deeper to fill the list. For "papers
+   that connect X and Y", pass X and Y as `cites` with `cites_match: "all"`;
+   for one topic among a paper's citing papers, pair `cites` with `title`.
+   Filters are a Premium feature; on a free account the tool says so.
+3. **Go deeper where it helps.** `get_paper` gives one paper's details,
+   including its DOI and arXiv id, and its most-cited references (where a
+   paper comes from). `list_citing_papers`
    lists the papers citing it, newest or most cited first (where
    a paper went next).
 4. **Answer with links.** Every paper in a result has a papernex.us `url`; give

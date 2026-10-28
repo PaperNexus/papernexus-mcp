@@ -8,7 +8,7 @@ from it.
 
 - Find papers related to "Attention Is All You Need".
 - What should I read next after the ResNet paper (arXiv 1512.03385)?
-- Which papers connect "Deep learning" (LeCun, Bengio, Hinton 2015) and "Mastering the game of Go with deep neural networks and tree search"?
+- Find papers related to both "Deep learning" (LeCun, Bengio, Hinton 2015) and "Mastering the game of Go with deep neural networks and tree search"?
 - Show me the main references of the AlphaFold 2 paper.
 
 ## Positive test cases
@@ -27,7 +27,7 @@ Each should call the tools named and answer with papernex.us links.
    BERT among them).
 3. **"Recommend papers related to both 'Deep learning' by LeCun, Bengio and Hinton (2015) and 'Mastering the game of Go with deep neural networks and tree search'."**
    Two `search_papers` calls, then one `recommend_papers` call with both ids;
-   the answer describes papers related to both.
+   the answer describes the related papers, those related to both first.
 4. **"Search for papers titled 'protein structure prediction' and tell me which is most cited."**
    `search_papers` returns several matches with ids and years; the assistant
    may use `get_paper` to compare citation counts.
