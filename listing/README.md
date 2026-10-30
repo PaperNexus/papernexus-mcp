@@ -13,7 +13,7 @@ Before the first submission:
 
 | Directory | How | Reads from this repo |
 |---|---|---|
-| Official MCP Registry | `mcp-publisher login github` as PaperNexus, then `mcp-publisher publish` from the repo root | `server.json` |
+| Official MCP Registry | `mcp-publisher login dns --domain papernex.us` with the private key whose public half is in papernex.us's `v=MCPv1` TXT record, then `mcp-publisher publish` from the repo root | `server.json` |
 | Claude directory (connector and plugin) | claude.ai/directory/manage on a paid plan: submit the server URL as a connector and this repo as a plugin | `.claude-plugin/plugin.json`, `.mcp.json`, `skills/`, `assets/logo.png` |
 | ChatGPT / Codex plugin directory | OpenAI Platform plugin portal → With MCP; domain verification token served at `https://papernex.us/.well-known/openai-apps-challenge` | Copy from [chatgpt.md](chatgpt.md) |
 | Gemini CLI extensions | Listed from the `gemini-cli-extension` topic | `gemini-extension.json` |
