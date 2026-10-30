@@ -34,8 +34,10 @@ builds on, including ones that use different words for the same idea.
    papers citing X, closest to it first.
    Filters are a Premium feature; on a free account the tool says so.
    Each recommendation's `evidence` says which origins it is linked to
-   (`linked_origins`) and whether it cites them or they cite it. Use it to say
-   why a paper is there, and with several origins, which one it belongs to.
+   (`linked_origins`), whether it cites them or they cite it, and how many
+   co-citations and shared references link it (`link_counts`). Use it to say
+   why a paper is there, and with several origins, which one it belongs to;
+   rank a paper held up by one or two links below one with many.
    A paper with `citation_linked: false` ("no citation link") was added from
    OpenAlex's related works to fill the list, so treat it as a weaker lead.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,

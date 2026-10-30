@@ -93,10 +93,18 @@ doesn't record it:
 | `cites` | The origins it cites |
 | `cited_by` | The origins that cite it |
 | `citation_linked` | Present only as `false`: the paper wasn't found through citations, but added from OpenAlex's related works to fill a short list, after every linked paper |
+| `link_counts` | By origin id, `co_cited` (papers citing both it and the origin) and `shared_references` (references both cite), for the origins with either |
+
+The counts are taken over what was read for each origin, which each origin in
+`origins` reports as `sampled` (`citing_papers`, `references`). For a widely
+cited origin that is a sample, so treat the counts as how strongly a paper is
+linked, not as totals. A paper held up by one or two links is a weaker lead
+than one with dozens.
 
 Origins are given by their ids. In the text, each paper's line names them by
-their number in the origin list ("cites origin 2"), and marks a paper without
-a citation link "no citation link".
+their number in the origin list ("cites origin 2", "origin 1: 12 co-citations,
+3 shared references"), and marks a paper without a citation link "no citation
+link". Author names are given first name first.
 
 ### Filters
 
@@ -210,9 +218,9 @@ and `passed` (those that pass). `total` still counts every citing paper, not
 only those that pass.
 
 For a paper with more than 1,000 citing papers, only a sample of them is
-checked: its 200 newest, 200 earliest and 200 most cited, and the 50 most
-cited from each year in range, 2,000 at most. A three-year range therefore
-checks about 350. The order is within that sample, so "newest first" means
+checked: those in range among its 200 newest, 200 earliest and 200 most cited
+citing papers and the 50 most cited from each year, 2,000 at most, whatever
+the sort. A recent three-year range therefore checks about 350. The order is within that sample, so "newest first" means
 the newest of those. `complete` is then false, and the text says what was
 checked and that more that pass may exist.
 
