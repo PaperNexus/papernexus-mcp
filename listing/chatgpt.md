@@ -4,12 +4,30 @@ For the "With MCP" plugin submission. The server URL is
 `https://papernex.us/mcp`; the portal reads the tools and their annotations
 from it.
 
+OpenAI's guidelines forbid advertising pricing, plans or upgrades, in the
+listing and in tool output. The server's tool results never mention them, so
+keep this copy free of them too: use the description below, not the one in
+[descriptions.md](descriptions.md), which names the allowances.
+
+## Description
+
+Paper Nexus maps the scientific literature by its citations, using the
+scholarly works in OpenAlex and Semantic Scholar. Find a paper by its title,
+a DOI or a link; get the papers related to one paper or several through the
+citation network, each with the links that put it there; read a paper's
+details and most-cited references; see the papers that cite it; narrow
+recommendations and citing papers with filters (years, citations, authors,
+venues, title words, citing or cited papers, open access); and browse your
+Paper Nexus library, if you allow it. Every paper links to papernex.us, and
+every set of recommendations comes with a link to the whole citation graph.
+Sign in with your Paper Nexus account.
+
 ## Starter prompts
 
 - Find papers related to "Attention Is All You Need".
 - What should I read next after the ResNet paper (arXiv 1512.03385)?
 - Find papers related to both "Deep learning" (LeCun, Bengio, Hinton 2015) and "Mastering the game of Go with deep neural networks and tree search"?
-- Show me the main references of the AlphaFold 2 paper.
+- Show me the main references of the AlphaGo paper ("Mastering the game of Go with deep neural networks and tree search").
 
 ## Positive test cases
 
@@ -20,11 +38,14 @@ Each should call the tools named and answer with papernex.us links.
    related papers, most related first (attention and neural machine translation
    work such as Bahdanau et al. and "Sequence to Sequence Learning"), with
    papernex.us links and a graph link.
-2. **"Who wrote the paper at https://doi.org/10.1038/s41586-021-03819-2, how often is it cited, and what are its most cited references?"**
-   `search_papers` with the link finds "Highly accurate protein structure
-   prediction with AlphaFold" (Nature, 2021); `get_paper` returns its authors,
-   citation count and top references (ResNet, "Attention Is All You Need" and
-   BERT among them).
+2. **"Who wrote the paper at https://doi.org/10.1038/nature16961, how often is it cited, and what are its most cited references?"**
+   `search_papers` with the link finds "Mastering the game of Go with deep
+   neural networks and tree search" (Nature, 2016); `get_paper` returns its
+   authors (David Silver first), citation count and top references
+   (AlexNet's "ImageNet classification with deep convolutional neural
+   networks", Sutton and Barto's "Reinforcement Learning: An Introduction" and
+   DQN's "Human-level control through deep reinforcement learning" among
+   them).
 3. **"Recommend papers related to both 'Deep learning' by LeCun, Bengio and Hinton (2015) and 'Mastering the game of Go with deep neural networks and tree search'."**
    Two `search_papers` calls, then one `recommend_papers` call with both ids;
    the answer describes the related papers, those related to both first.
@@ -58,6 +79,5 @@ only, never in this repository.
 First release: search papers by title, DOI or link; recommendations from one
 or more papers through the citation network, each with the citation links
 behind it; a paper's details and most-cited references; the papers citing a
-paper; filters on recommendations and citing papers for Premium accounts; your
-remaining allowance; and read-only access to your Paper Nexus library. Every
+paper; filters on recommendations and citing papers; your remaining allowance; and read-only access to your Paper Nexus library. Every
 tool that lists papers can return only the fields asked for.

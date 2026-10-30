@@ -78,8 +78,8 @@ how many are left and plan within them.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.
-When a limit is reached, the tool says so and when it resets, and a free
-account also gets the upgrade link; pass that on rather than retrying.
+When a limit is reached, the tool says so and when it resets; tell the user
+rather than retrying.
 
 ## Don'ts
 

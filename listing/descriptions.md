@@ -50,6 +50,27 @@ Nexus account: 10 counted calls a week (recommendations and citing-paper
 lists), no API key. Premium has 200 a day, up to 10 papers per request, and
 filters.
 
+## Example prompts
+
+For forms that ask for example prompts or use cases. Each works on a free
+account except the fourth, which uses filters (Premium).
+
+1. **Find papers related to "Attention Is All You Need" and tell me which to
+   read first.** Searches for the paper, then lists related work, most related
+   first, each with the citation links behind it and a link to the full graph.
+2. **Who wrote "Mastering the game of Go with deep neural networks and tree
+   search", how often is it cited, and what are its most cited references?**
+   Reads the paper's details and its key references in one lookup.
+3. **What should I read next after the ResNet paper
+   (https://arxiv.org/abs/1512.03385)?** Finds a paper from a link, then
+   recommends from it.
+4. **Which papers from 2024 on build on "Denoising Diffusion Probabilistic
+   Models"? Give me the ten closest.** Recommendations narrowed to papers
+   that cite it, from 2024 on.
+5. **Look at my Paper Nexus library and suggest papers my "Thesis" collection
+   is missing.** Reads a collection (with the library permission) and
+   recommends from the papers in it.
+
 ## Categories
 
 Research, Education, Science, Productivity (choose whichever the directory offers)
