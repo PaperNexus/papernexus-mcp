@@ -40,10 +40,12 @@ Find papers by title and get their Paper Nexus ids.
 |---|---|---|
 | `query` | string, required | A title or part of one, a DOI, or a link to a paper (doi.org, arXiv, PubMed, publisher pages). At most 512 characters. |
 | `limit` | integer | 1–20, default 10 |
-| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `doi`, `url` |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `doi`, `cited_by_count`, `url` |
 
 Returns `results`: up to `limit` papers, best match first, each with `id`,
-`title`, `authors` (the first three), `year`, `doi` and `url`. When nothing
+`title`, `authors` (the first three), `year`, `doi`, `cited_by_count` (null
+when not known) and `url`, so comparing matches by citations takes no further
+calls. When nothing
 matched every word of the query, the nearest titles come back with
 `closest_matches: true`. `too_broad`, `timed_out` and `unread_link` explain an
 empty or partial answer.
@@ -187,11 +189,11 @@ The papers that cite one paper, newest, earliest or most cited first.
 | `year_from`, `year_to` | integer | Only citing papers published in this span |
 | `offset` | integer | 0–1000, default 0 |
 | `limit` | integer | 1–50, default 25 |
-| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `url` |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url` |
 | `filters` | object | Premium; see below |
 
 Returns `results` (`id`, `title`, `authors` (the first three), `year`, `venue`,
-`doi`, `cited_by_count`, `url`), `total` (citing papers in Paper Nexus, or null
+`doi`, `cited_by_count`, `open_access`, `url`), `total` (citing papers in Paper Nexus, or null
 when not known exactly), `complete`, `sort`, `offset`, and `next_offset` for the
 next page (null on the last one). `total` counts the citing papers Paper Nexus
 holds, so it can be lower than a paper's `cited_by_count`. With `year_from` or

@@ -29,8 +29,8 @@ Each should call the tools named and answer with papernex.us links.
    Two `search_papers` calls, then one `recommend_papers` call with both ids;
    the answer describes the related papers, those related to both first.
 4. **"Search for papers titled 'protein structure prediction' and tell me which is most cited."**
-   `search_papers` returns several matches with ids and years; the assistant
-   may use `get_paper` to compare citation counts.
+   `search_papers` returns several matches with ids, years and citation
+   counts; the assistant names the most cited without further calls.
 5. **"Give me 5 papers to read around doi:10.1038/nature14539, with links."**
    `search_papers` with the DOI finds "Deep learning" (Nature, 2015);
    `recommend_papers` with `limit` 5 returns five papers with papernex.us links.
