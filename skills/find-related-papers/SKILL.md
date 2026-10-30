@@ -26,6 +26,10 @@ builds on, including ones that use different words for the same idea.
    results yourself: the search goes deeper to fill the list. For "papers
    that connect X and Y", pass X and Y as `cites` with `cites_match: "all"`;
    for one topic among a paper's citing papers, pair `cites` with `title`.
+   For a paper with more than 1,000 citing papers, `cites` checks only papers
+   near the origins, and the result's first line says so: then tell the user
+   the list may miss recent or narrow-topic work, rather than presenting an
+   empty or short list as the whole answer.
    For "the work that builds on X", pass X as the origin and as `cites`: the
    papers citing X, closest to it first.
    Filters are a Premium feature; on a free account the tool says so.

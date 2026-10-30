@@ -67,7 +67,8 @@ topic with `filters.title`.
 
 Returns `origins` (the papers you passed), `recommendations`, most related
 first, `not_found` (ids that aren't Paper Nexus papers), and `graph_url`, which
-opens the whole graph on papernex.us. Each paper has `id`, `title`, `authors`
+opens the whole graph on papernex.us. That graph usually holds more papers
+than `limit`: the list is its top papers. Each paper has `id`, `title`, `authors`
 (the first three), `year`, `venue`, `doi`, `cited_by_count`, `open_access` and
 `url`, and each recommendation also has `evidence`. The graph is also saved to
 your Paper Nexus history.
@@ -110,14 +111,15 @@ pass filters here rather than filtering the results yourself.
 | `types` | array | Any of `article`, `preprint`, `review`, `book`, `dissertation`, `report`, `letter`, `dataset`, `conference-paper`, `data-paper`, `software-paper` |
 | `venues` | array, up to 5 | Journals or conferences, any of which may match: a full name, two or more words of one ("Physical Review"), or an acronym ("CVPR", "PNAS"). A single word matches only a venue of that name. Each up to 100 characters. |
 | `authors` + `authors_match` | array, up to 5; `any` or `all` | "Geoffrey Hinton" or "Hinton G"; accents and case are ignored. Each up to 100 characters. |
-| `title` + `title_match` | array, up to 5; `any` or `all` | Words or phrases the title must contain, such as "QROM" or "surface code". They match whole words, so QROM doesn't match QROMs; case, accents and punctuation are ignored. Each up to 100 characters. Pair it with `cites` to find the papers citing a paper that are about one topic. |
+| `title` + `title_match` | array, up to 5; `any` or `all` | Words or phrases the title must contain, such as "QROM" or "surface code". They match whole words, so QROM doesn't match QROMs; case, accents and punctuation are ignored. Each up to 100 characters. Pair it with `cites` to find the papers citing a paper that are about one topic; see [Heavily cited papers](#heavily-cited-papers). |
 | `cites` + `cites_match` | array, up to 3; `any` or `all` | Keep papers that cite these papers |
 | `cited_by` + `cited_by_match` | array, up to 3; `any` or `all` | Keep papers that these papers cite |
 
 A filtered result adds `rank` to each recommendation and `matches_filters` to
 each origin, whatever `fields` asks for, plus `filters` (the filters as
 understood) and `filter_summary`. Its `graph_url` reopens the same filtered
-graph.
+graph, at the size Paper Nexus shows on its site (25, 50 or 100 papers), so it
+can hold more papers than `limit`.
 
 `filter_summary` has `requested` (papers the search tried to find),
 `returned` (papers it found that pass), `checked` (nearby papers it checked
@@ -126,6 +128,19 @@ search reached the most papers it checks, so more that pass may exist further
 out), `deadline_hit` (the search ran out of time), `matched` (the author and
 venue names each filter matched) and `notes` (why the list is short, if it
 is, and anything else to know).
+
+### Heavily cited papers
+
+Paper Nexus stores up to 1,000 of each paper's citing papers. For a paper
+with more, the `cites` filter can't list every paper that cites it, so the
+search checks only papers near the origins: papers cited alongside them, or
+sharing their references. Topics far from the origins' neighbourhood, and
+especially recent work, can come back with few results or none, even when many
+papers that cite it exist. "Papers citing *Attention Is All You Need* since
+2024 about retrieval" is an example. When this applies, the result's first
+line says so, and `filter_summary.sampled_cites` names the papers
+(`id`, `title`). `list_citing_papers` with filters checks only a sample of such
+a paper's citing papers too.
 
 ## `get_paper`
 
@@ -189,10 +204,15 @@ the same order. They are `recommend_papers`' [filters](#filters) except
 Filters are a Premium feature; a free account that sends them is told so, and
 the call isn't counted. The result adds `filters` (the filters as understood)
 and `filter_summary`: `checked` (citing papers checked against the filters)
-and `passed` (those that pass). On a widely cited paper, up to 2,000 citing
-papers are checked, so more may pass than are listed; `complete` is then false
-and the text says so. `total` still counts every citing paper, not only those
-that pass.
+and `passed` (those that pass). `total` still counts every citing paper, not
+only those that pass.
+
+For a paper with more than 1,000 citing papers, only a sample of them is
+checked: its 200 newest, 200 earliest and 200 most cited, and the 50 most
+cited from each year in range, 2,000 at most. A three-year range therefore
+checks about 350. The order is within that sample, so "newest first" means
+the newest of those. `complete` is then false, and the text says what was
+checked and that more that pass may exist.
 
 To find the citing papers most closely related to a paper, rather than all of
 them by date or citation count, call `recommend_papers` with the paper as the
