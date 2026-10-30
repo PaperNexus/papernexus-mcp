@@ -36,9 +36,11 @@ assistant to:
   one of them first.
 - **Read a paper's details** and its most-cited references, and see the
   papers that cite it.
-- **Narrow recommendations with filters** (Premium): years, citation counts,
-  authors, venues, title words, citing or cited papers, open access and
-  document types.
+- **See why each paper is recommended**: which of your papers it is linked
+  to, and whether it cites them or they cite it.
+- **Narrow recommendations and citing papers with filters** (Premium): years,
+  citation counts, authors, venues, title words, citing or cited papers, open
+  access and document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your
   collections are missing.
 

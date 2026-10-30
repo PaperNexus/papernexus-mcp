@@ -25,6 +25,7 @@ connected:
 | `get_paper` | Every account | Lookups |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
+| `list_citing_papers` `filters` | Premium | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
 
 Every call also counts toward a limit of 30 calls a minute. Past a limit, the
@@ -61,14 +62,38 @@ topic with `filters.title`.
 |---|---|---|
 | `papers` | array of strings, required | 1–10 Paper Nexus ids or links. Free accounts combine up to 2. |
 | `limit` | integer | 1–50, default 25 |
-| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the origins as well as the recommendations. |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`, `evidence`. Cuts the origins as well as the recommendations. |
 | `filters` | object | Premium; see below |
 
 Returns `origins` (the papers you passed), `recommendations`, most related
 first, `not_found` (ids that aren't Paper Nexus papers), and `graph_url`, which
 opens the whole graph on papernex.us. Each paper has `id`, `title`, `authors`
 (the first three), `year`, `venue`, `doi`, `cited_by_count`, `open_access` and
-`url`. The graph is also saved to your Paper Nexus history.
+`url`, and each recommendation also has `evidence`. The graph is also saved to
+your Paper Nexus history.
+
+The order weighs how strongly each paper is linked to the origins through
+citations, over a sample of the citing papers and references of a widely
+cited origin. Without filters, it also damps very highly cited papers and
+lifts recent ones. It orders this one list: it isn't a probability of
+relevance or a measure of a paper's importance.
+
+### Evidence
+
+`evidence` gives the citation links behind a recommendation. It holds only
+what the citation graph records, and a part is left out when the graph
+doesn't record it:
+
+| Field | Meaning |
+|---|---|
+| `linked_origins` | The origins it was found through: cited alongside them, sharing references with them, or citing or cited by them |
+| `cites` | The origins it cites |
+| `cited_by` | The origins that cite it |
+| `citation_linked` | Present only as `false`: the paper wasn't found through citations, but added from OpenAlex's related works to fill a short list, after every linked paper |
+
+Origins are given by their ids. In the text, each paper's line names them by
+their number in the origin list ("cites origin 2"), and marks a paper without
+a citation link "no citation link".
 
 ### Filters
 
@@ -126,12 +151,15 @@ How many calls your account has left. Call it before a task that needs many
 calls, to plan within the limits instead of running into them. It takes no
 arguments. It isn't counted against the allowance, but it uses one lookup.
 
-Returns `tier` (`free` or `premium`), `usage_period` (`weekly` or `daily`),
-`limit`, `used`, `remaining`, `resets_at` (when the current window ends, in
-UTC; null when none is open, and the next counted call opens one) and
+Returns `checked_at` (the report's time, in UTC), `tier` (`free` or
+`premium`), `usage_period` (`weekly` or `daily`), `limit`, `used`,
+`remaining`, `resets_at` (when the current window ends, in UTC; null when none
+is open, and the next counted call opens one) and
 `counted_tools` (the counted tools your account sees), plus `lookups` (`limit`,
 `used`, `remaining`, `resets_at` and `tools`, the daily limit the other tools
-share) and `calls_per_minute`.
+share) and `calls_per_minute`. Each window starts at its first call, not at
+midnight, so the allowance and the lookups can reset at different times; the
+text says how long each has left.
 
 ## `list_citing_papers`
 
@@ -145,6 +173,7 @@ The papers that cite one paper, newest, earliest or most cited first.
 | `offset` | integer | 0–1000, default 0 |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `url` |
+| `filters` | object | Premium; see below |
 
 Returns `results` (`id`, `title`, `authors` (the first three), `year`, `venue`,
 `doi`, `cited_by_count`, `url`), `total` (citing papers in Paper Nexus, or null
@@ -153,6 +182,22 @@ next page (null on the last one). `total` counts the citing papers Paper Nexus
 holds, so it can be lower than a paper's `cited_by_count`. With `year_from` or
 `year_to`, a year with many citing papers may list only its most cited ones;
 the text names those years, and `complete` is then false.
+
+With `filters`, only the citing papers that pass every filter are listed, in
+the same order. They are `recommend_papers`' [filters](#filters) except
+`year_min` and `year_max`: use `year_from` and `year_to` for the years.
+Filters are a Premium feature; a free account that sends them is told so, and
+the call isn't counted. The result adds `filters` (the filters as understood)
+and `filter_summary`: `checked` (citing papers checked against the filters)
+and `passed` (those that pass). On a widely cited paper, up to 2,000 citing
+papers are checked, so more may pass than are listed; `complete` is then false
+and the text says so. `total` still counts every citing paper, not only those
+that pass.
+
+To find the citing papers most closely related to a paper, rather than all of
+them by date or citation count, call `recommend_papers` with the paper as the
+origin and as `filters.cites`. Most cited first ranks by citations alone, so
+it is led by widely cited papers that cite this one in passing.
 
 ## `list_library`
 

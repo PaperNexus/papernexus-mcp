@@ -56,7 +56,8 @@ only, never in this repository.
 ## Release notes (1.0.0)
 
 First release: search papers by title, DOI or link; recommendations from one
-or more papers through the citation network; a paper's details and most-cited
-references; the papers citing a paper; filters on recommendations for
-Premium accounts; your remaining allowance; and read-only access to your Paper Nexus
-library. Every tool that lists papers can return only the fields asked for.
+or more papers through the citation network, each with the citation links
+behind it; a paper's details and most-cited references; the papers citing a
+paper; filters on recommendations and citing papers for Premium accounts; your
+remaining allowance; and read-only access to your Paper Nexus library. Every
+tool that lists papers can return only the fields asked for.

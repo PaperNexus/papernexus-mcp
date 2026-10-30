@@ -26,12 +26,23 @@ builds on, including ones that use different words for the same idea.
    results yourself: the search goes deeper to fill the list. For "papers
    that connect X and Y", pass X and Y as `cites` with `cites_match: "all"`;
    for one topic among a paper's citing papers, pair `cites` with `title`.
+   For "the work that builds on X", pass X as the origin and as `cites`: the
+   papers citing X, closest to it first.
    Filters are a Premium feature; on a free account the tool says so.
+   Each recommendation's `evidence` says which origins it is linked to
+   (`linked_origins`) and whether it cites them or they cite it. Use it to say
+   why a paper is there, and with several origins, which one it belongs to.
+   A paper with `citation_linked: false` ("no citation link") was added from
+   OpenAlex's related works to fill the list, so treat it as a weaker lead.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,
    including its DOI and arXiv id, and its most-cited references (where a
    paper comes from). `list_citing_papers`
    lists the papers citing it, newest or most cited first (where
-   a paper went next).
+   a paper went next), and takes the same `filters` (years are `year_from`
+   and `year_to`) to list only the citing papers by an author, in a venue or
+   with a word in the title. Most cited first is led by famous papers that
+   cite it in passing, so for the citers that matter, prefer step 2's `cites`
+   filter.
 4. **Answer with links.** Every paper in a result has a papernex.us `url`; give
    it beside each paper you mention, and give `graph_url` so the user can open
    the whole graph in Paper Nexus and explore it visually.
@@ -71,4 +82,7 @@ account also gets the upgrade link; pass that on rather than retrying.
 - Don't present the results as a complete bibliography. They are the papers
   most connected to the origins in the citation network, most related
   first.
+- Don't present the order as a relevance score or a measure of importance. It
+  orders one list by citation linkage and, without filters, lifts recent
+  papers and damps very highly cited ones.
 - Paper Nexus has metadata, not full text. For a paper's content, link to it.

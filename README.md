@@ -119,9 +119,11 @@ on.
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
 | `list_citing_papers` | The papers citing one paper |
 
-`recommend_papers` also takes filters (years, citation counts, authors,
-venues, title words, citing or cited papers, open access, document types) on
-Premium accounts.
+`recommend_papers` and `list_citing_papers` also take filters (years,
+citation counts, authors, venues, title words, citing or cited papers, open
+access, document types) on Premium accounts. Each recommendation says which
+origin papers it is linked to and how, so your assistant can tell you why a
+paper is there.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
