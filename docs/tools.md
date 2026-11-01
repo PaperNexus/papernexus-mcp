@@ -21,11 +21,11 @@ connected:
 |---|---|---|
 | `search_papers` | Every account | Lookups |
 | `recommend_papers` | Every account | The allowance |
-| `recommend_papers` `filters` | Premium | The allowance |
+| `recommend_papers` `filters` | Every account | The allowance |
 | `get_paper` | Every account | Lookups |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
-| `list_citing_papers` `filters` | Premium | The allowance |
+| `list_citing_papers` `filters` | Every account | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
 
 Every call also counts toward a limit of 30 calls a minute. Past a limit, the
@@ -65,7 +65,7 @@ topic with `filters.title`.
 | `papers` | array of strings, required | 1–10 Paper Nexus ids or links. Free accounts combine up to 2. |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`, `evidence`. Cuts the origins as well as the recommendations. |
-| `filters` | object | Premium; see below |
+| `filters` | object | See below |
 
 Returns `origins` (the papers you passed), `recommendations`, most related
 first, `not_found` (ids that aren't Paper Nexus papers), and `graph_url`, which
@@ -108,9 +108,8 @@ link". Author names are given first name first.
 
 ### Filters
 
-With `filters`, every recommended paper passes all the filters given. Filters
-are a Premium feature; a free account that sends them is told so, and the call
-isn't counted. The search goes deeper than plain recommendations to fill the list, so
+With `filters`, every recommended paper passes all the filters given. A
+filtered call is counted like any other. The search goes deeper than plain recommendations to fill the list, so
 pass filters here rather than filtering the results yourself.
 
 | Filter | Type | Notes |
@@ -198,7 +197,7 @@ The papers that cite one paper, newest, earliest or most cited first.
 | `offset` | integer | 0–1000, default 0 |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url` |
-| `filters` | object | Premium; see below |
+| `filters` | object | See below |
 
 Returns `results` (`id`, `title`, `authors` (the first three), `year`, `venue`,
 `doi`, `cited_by_count`, `open_access`, `url`), `total` (citing papers in Paper Nexus, or null
@@ -211,8 +210,7 @@ the text names those years, and `complete` is then false.
 With `filters`, only the citing papers that pass every filter are listed, in
 the same order. They are `recommend_papers`' [filters](#filters) except
 `year_min` and `year_max`: use `year_from` and `year_to` for the years.
-Filters are a Premium feature; a free account that sends them is told so, and
-the call isn't counted. The result adds `filters` (the filters as understood)
+The result adds `filters` (the filters as understood)
 and `filter_summary`: `checked` (citing papers checked against the filters)
 and `passed` (those that pass). `total` still counts every citing paper, not
 only those that pass.

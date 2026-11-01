@@ -32,7 +32,6 @@ builds on, including ones that use different words for the same idea.
    empty or short list as the whole answer.
    For "the work that builds on X", pass X as the origin and as `cites`: the
    papers citing X, closest to it first.
-   Filters are a Premium feature; on a free account the tool says so.
    Each recommendation's `evidence` says which origins it is linked to
    (`linked_origins`), whether it cites them or they cite it, and how many
    co-citations and shared references link it (`link_counts`). Use it to say
@@ -71,7 +70,8 @@ how many are left and plan within them.
 
 - **Free accounts:** 10 counted calls a week, and up to 2 origin papers per
   recommendation.
-- **Premium:** 200 counted calls a day, up to 10 origin papers, and filters.
+- **Premium:** 200 counted calls a day and up to 10 origin papers.
+- **Filters** work on every account, and a filtered call counts like any other.
 - **Lookups:** the other tools share 100 calls a day (free) or 1,000
   (Premium), and every tool a limit of 30 calls a minute, so don't loop over
   `get_paper` for a long list when `fields` on one listing gives what you need.

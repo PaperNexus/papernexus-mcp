@@ -121,7 +121,7 @@ on.
 
 `recommend_papers` and `list_citing_papers` also take filters (years,
 citation counts, authors, venues, title words, citing or cited papers, open
-access, document types) on Premium accounts. Each recommendation says which
+access, document types) on every account. Each recommendation says which
 origin papers it is linked to and how, so your assistant can tell you why a
 paper is there.
 Every tool that lists papers takes `fields`, to return only the details you
@@ -137,9 +137,10 @@ of 30 calls a minute. `get_usage` tells your assistant how many calls are left.
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
 |---|---|---|---|
 | Free | 10 a week | 100 a day | up to 2 |
-| Premium | 200 a day | 1,000 a day | up to 10, plus filters |
+| Premium | 200 a day | 1,000 a day | up to 10 |
 
-A recommendation or citing list that fails or finds nothing isn't counted. See
+A filtered call is counted like any other. A recommendation or citing list
+that fails or finds nothing isn't counted. See
 [pricing](https://papernex.us/pricing) for Premium.
 
 ## Privacy and access

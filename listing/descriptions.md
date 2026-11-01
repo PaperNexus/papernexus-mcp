@@ -38,7 +38,7 @@ assistant to:
   papers that cite it.
 - **See why each paper is recommended**: which of your papers it is linked
   to, and whether it cites them or they cite it.
-- **Narrow recommendations and citing papers with filters** (Premium): years,
+- **Narrow recommendations and citing papers with filters**: years,
   citation counts, authors, venues, title words, citing or cited papers, open
   access and document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your
@@ -47,13 +47,12 @@ assistant to:
 Every paper links to papernex.us, and every set of recommendations comes with
 a link that opens the whole citation graph there. Sign in with a free Paper
 Nexus account: 10 counted calls a week (recommendations and citing-paper
-lists), no API key. Premium has 200 a day, up to 10 papers per request, and
-filters.
+lists), no API key. Premium has 200 a day and up to 10 papers per request.
 
 ## Example prompts
 
 For forms that ask for example prompts or use cases. Each works on a free
-account except the fourth, which uses filters (Premium).
+account.
 
 1. **Find papers related to "Attention Is All You Need" and tell me which to
    read first.** Searches for the paper, then lists related work, most related
