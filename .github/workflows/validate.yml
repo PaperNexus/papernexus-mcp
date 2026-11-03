@@ -31,7 +31,7 @@ jobs:
           url = sys.argv[1]
           found = {
               "server.json": json.load(open("server.json"))["remotes"][0]["url"],
-              ".mcp.json": json.load(open(".mcp.json"))["mcpServers"]["papernexus"]["url"],
+              "plugins/papernexus/.mcp.json": json.load(open("plugins/papernexus/.mcp.json"))["mcpServers"]["papernexus"]["url"],
               "gemini-extension.json": json.load(open("gemini-extension.json"))["mcpServers"]["papernexus"]["httpUrl"],
           }
           wrong = {name: value for name, value in found.items() if value != url}
@@ -39,9 +39,11 @@ jobs:
               sys.exit(f"Server URL differs from {url}: {wrong}")
           versions = {
               "server.json": json.load(open("server.json"))["version"],
-              ".claude-plugin/plugin.json": json.load(open(".claude-plugin/plugin.json"))["version"],
+              "plugins/papernexus/.claude-plugin/plugin.json": json.load(open("plugins/papernexus/.claude-plugin/plugin.json"))["version"],
               "gemini-extension.json": json.load(open("gemini-extension.json"))["version"],
           }
           if len(set(versions.values())) != 1:
               sys.exit(f"Versions differ: {versions}")
           PY
+      - name: The plugin's logo is the same file as the repo's
+        run: cmp assets/logo.png plugins/papernexus/assets/logo.png
