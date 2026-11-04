@@ -8,6 +8,10 @@
   Find related scientific papers through their citation network, from Claude, ChatGPT, Cursor, VS Code or any MCP client.
 </p>
 
+<p align="center">
+  <a href="https://lobehub.com/mcp/papernexus-papernexus-mcp"><img src="https://lobehub.com/badge/mcp/papernexus-papernexus-mcp" alt="MCP Badge"></a>
+</p>
+
 ---
 
 [Paper Nexus](https://papernex.us) maps the scientific literature by its
