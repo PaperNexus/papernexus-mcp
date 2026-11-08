@@ -156,7 +156,7 @@ stores, so its filters don't have this limit.
 
 ## `get_paper`
 
-One paper's details and its most-cited references.
+One paper's details, subject and keywords, and its most-cited references.
 
 | Argument | Type | Notes |
 |---|---|---|
@@ -165,13 +165,21 @@ One paper's details and its most-cited references.
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the references only; the paper itself always comes back whole. |
 
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
-`arxiv_id`, `cited_by_count`, `reference_count`, `open_access`, `url`,
-`graph_url`),
+`arxiv_id`, `cited_by_count`, `reference_count`, `open_access`, `subject`,
+`keywords`, `url`, `graph_url`),
 `references`, and `references_indexed` (how many of its references are papers
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
 Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,
-and isn't saved to your history. For all of a paper's references, sorted, by
-year or filtered, use [`list_references`](#list_references).
+and isn't saved to your history.
+
+`subject` is OpenAlex's `domain`, `field` and `subfield` for the paper's main
+topic, such as Physical Sciences, Computer Science and Artificial
+Intelligence, or null when it isn't known. `keywords` lists up to five of
+OpenAlex's keywords for the paper, best first. Both come from OpenAlex, so a
+paper that only Semantic Scholar knows has neither.
+
+For all of a paper's references, sorted, by year or filtered, use
+[`list_references`](#list_references).
 
 ## `list_references`
 

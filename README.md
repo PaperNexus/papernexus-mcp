@@ -118,7 +118,7 @@ on.
 |---|---|
 | `search_papers` | Find a paper by its title, a DOI or a link, and get its Paper Nexus id |
 | `recommend_papers` | Papers related to one or more papers through their citation network |
-| `get_paper` | One paper's details and its most-cited references |
+| `get_paper` | One paper's details, subject, keywords and most-cited references |
 | `list_references` | The papers one paper cites, sorted, by year or filtered |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |

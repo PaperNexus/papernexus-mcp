@@ -40,7 +40,8 @@ builds on, including ones that use different words for the same idea.
    A paper with `citation_linked: false` ("no citation link") was added from
    OpenAlex's related works to fill the list, so treat it as a weaker lead.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,
-   including its DOI and arXiv id, and its most-cited references (where a
+   including its DOI and arXiv id, its subject (OpenAlex's domain, field
+   and subfield) and keywords, and its most-cited references (where a
    paper comes from). `list_references` lists all of them (Paper Nexus
    stores up to 600), most cited, newest or earliest first, and takes
    `filters` and a year span like `list_citing_papers` below; for the
