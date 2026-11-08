@@ -33,6 +33,7 @@ jobs:
               "server.json": json.load(open("server.json"))["remotes"][0]["url"],
               "plugins/papernexus/.mcp.json": json.load(open("plugins/papernexus/.mcp.json"))["mcpServers"]["papernexus"]["url"],
               "gemini-extension.json": json.load(open("gemini-extension.json"))["mcpServers"]["papernexus"]["httpUrl"],
+              "chatgpt/mcp.json": json.load(open("chatgpt/mcp.json"))["mcpServers"]["papernexus"]["url"],
           }
           wrong = {name: value for name, value in found.items() if value != url}
           if wrong:
@@ -41,9 +42,22 @@ jobs:
               "server.json": json.load(open("server.json"))["version"],
               "plugins/papernexus/.claude-plugin/plugin.json": json.load(open("plugins/papernexus/.claude-plugin/plugin.json"))["version"],
               "gemini-extension.json": json.load(open("gemini-extension.json"))["version"],
+              "chatgpt/plugin.json": json.load(open("chatgpt/plugin.json"))["version"],
           }
           if len(set(versions.values())) != 1:
               sys.exit(f"Versions differ: {versions}")
           PY
-      - name: The plugin's logo is the same file as the repo's
-        run: cmp assets/logo.png plugins/papernexus/assets/logo.png
+      - name: The plugins' logos are the same file as the repo's
+        run: |
+          cmp assets/logo.png plugins/papernexus/assets/logo.png
+          cmp assets/logo.png chatgpt/assets/logo.png
+      # chatgpt/mcp.json is not checked against its $schema: OpenAI reads the
+      # per-server extensions.com.openai.auth block, which the published Agent
+      # Plugins 1.0.0 schema does not allow.
+      - name: The ChatGPT manifest matches the Agent Plugins schema
+        run: |
+          check-jsonschema --schemafile "$(python -c 'import json; print(json.load(open("chatgpt/plugin.json"))["$schema"])')" chatgpt/plugin.json
+      - name: The ChatGPT listing fits the directory's limits
+        run: python scripts/check-chatgpt-listing.py
+      - name: The ChatGPT ZIP builds
+        run: scripts/build-chatgpt-zip.sh

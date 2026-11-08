@@ -15,7 +15,7 @@ Before the first submission:
 |---|---|---|
 | Official MCP Registry | `mcp-publisher login dns --domain papernex.us` with the private key whose public half is in papernex.us's `v=MCPv1` TXT record, then `mcp-publisher publish` from the repo root | `server.json` |
 | Claude directory (connector and plugin) | claude.ai/directory/manage on a paid plan: submit the server URL as a connector and this repo as a plugin | `plugins/papernexus/` only (the marketplace in `.claude-plugin/` points there) |
-| ChatGPT / Codex plugin directory | OpenAI Platform plugin portal → With MCP; domain verification token served at `https://papernex.us/.well-known/openai-apps-challenge` | Copy from [chatgpt.md](chatgpt.md) |
+| ChatGPT / Codex plugin directory | Upload the ZIP from `scripts/build-chatgpt-zip.sh` at platform.openai.com/plugins; domain verification token served at `https://papernex.us/.well-known/openai-apps-challenge`; steps in [chatgpt.md](chatgpt.md) | `chatgpt/` |
 | Gemini CLI extensions | Listed from the `gemini-cli-extension` topic | `gemini-extension.json` |
 | Glama | Claim the server after it is indexed | `glama.json` |
 | PulseMCP | Indexes the official registry; claim the listing | — |
@@ -26,6 +26,8 @@ Before the first submission:
 ## Releasing a new version
 
 Change `version` in `server.json`,
-`plugins/papernexus/.claude-plugin/plugin.json` and `gemini-extension.json`
-together (CI checks they agree), commit, tag `v<version>`, run
-`mcp-publisher publish`, and submit the update in the Claude directory portal.
+`plugins/papernexus/.claude-plugin/plugin.json`, `gemini-extension.json` and
+`chatgpt/plugin.json` together (CI checks they agree), commit, tag `v<version>`, run
+`mcp-publisher publish`, submit the update in the Claude directory portal, and
+upload a new ChatGPT ZIP if the listing changed (tool changes reach ChatGPT
+through OpenAI's daily scan).
