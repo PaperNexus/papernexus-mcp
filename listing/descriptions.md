@@ -34,11 +34,11 @@ assistant to:
   wording, so it finds the papers a field builds on even when they use
   different words. Several papers together put the work related to more than
   one of them first.
-- **Read a paper's details** and its most-cited references, and see the
-  papers that cite it.
+- **Read a paper's details**, list its references, and see the papers that
+  cite it.
 - **See why each paper is recommended**: which of your papers it is linked
   to, and whether it cites them or they cite it.
-- **Narrow recommendations and citing papers with filters**: years,
+- **Narrow recommendations, references and citing papers with filters**: years,
   citation counts, authors, venues, title words, citing or cited papers, open
   access and document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your

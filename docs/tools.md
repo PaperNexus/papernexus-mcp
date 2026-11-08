@@ -23,6 +23,8 @@ connected:
 | `recommend_papers` | Every account | The allowance |
 | `recommend_papers` `filters` | Every account | The allowance |
 | `get_paper` | Every account | Lookups |
+| `list_references` | Every account | Lookups |
+| `list_references` `filters` | Every account | Lookups |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
@@ -149,7 +151,8 @@ papers that cite it exist. "Papers citing *Attention Is All You Need* since
 2024 about retrieval" is an example. When this applies, the result's first
 line says so, and `filter_summary.sampled_cites` names the papers
 (`id`, `title`). `list_citing_papers` with filters checks only a sample of such
-a paper's citing papers too.
+a paper's citing papers too. `list_references` checks every reference it
+stores, so its filters don't have this limit.
 
 ## `get_paper`
 
@@ -167,7 +170,49 @@ Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 `references`, and `references_indexed` (how many of its references are papers
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
 Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,
-and isn't saved to your history.
+and isn't saved to your history. For all of a paper's references, sorted, by
+year or filtered, use [`list_references`](#list_references).
+
+## `list_references`
+
+The papers one paper cites, most cited, newest or earliest first.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `paper` | string, required | A Paper Nexus id or link |
+| `sort` | string | `most_cited` (default), `newest` or `oldest` |
+| `year_from`, `year_to` | integer | Only references published in this span |
+| `offset` | integer | 0–1000, default 0 |
+| `limit` | integer | 1–50, default 25 |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url` |
+| `filters` | object | See below |
+
+Returns `results` (`id`, `title`, `authors` (the first three), `year`, `venue`,
+`doi`, `cited_by_count`, `open_access`, `url`), `total` (references that are
+papers in Paper Nexus, within `year_from` and `year_to` when given),
+`reference_count` (the references the paper lists, in Paper Nexus or not; null
+when not known), `complete`, `sort`, `offset`, and `next_offset` for the next
+page (null on the last one). It uses a lookup, not the allowance, and isn't
+saved to your history.
+
+Paper Nexus stores up to 600 references a paper and reads every one, so the
+list is exact: nothing is sampled. For a paper that lists more than 600, it
+holds an arbitrary 600 of them. `complete` is then false, `total` is null,
+and the text says how many references the paper lists.
+
+With `filters`, only the references that pass every filter are listed, in
+the same order. They are `recommend_papers`' [filters](#filters) except
+`year_min` and `year_max`: use `year_from` and `year_to` for the years. Here
+`cites` keeps the references that cite the papers named, and `cited_by` the
+references those papers cite too. The result adds `filters` (the filters as
+understood) and `filter_summary`: `checked` (references checked against the
+filters) and `passed` (those that pass). `total` still counts every
+reference, not only those that pass.
+
+To find the references most closely tied to a paper's own work, rather than
+all of them by date or citation count, call `recommend_papers` with the paper
+as the origin and as `filters.cited_by`. Most cited first ranks by citations
+alone, so it is led by widely cited papers it may cite in passing.
 
 ## `get_usage`
 

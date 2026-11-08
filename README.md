@@ -119,11 +119,12 @@ on.
 | `search_papers` | Find a paper by its title, a DOI or a link, and get its Paper Nexus id |
 | `recommend_papers` | Papers related to one or more papers through their citation network |
 | `get_paper` | One paper's details and its most-cited references |
+| `list_references` | The papers one paper cites, sorted, by year or filtered |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
 | `list_citing_papers` | The papers citing one paper |
 
-`recommend_papers` and `list_citing_papers` also take filters (years,
+`recommend_papers`, `list_references` and `list_citing_papers` also take filters (years,
 citation counts, authors, venues, title words, citing or cited papers, open
 access, document types) on every account. Each recommendation says which
 origin papers it is linked to and how, so your assistant can tell you why a

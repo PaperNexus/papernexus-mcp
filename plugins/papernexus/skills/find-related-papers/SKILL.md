@@ -41,7 +41,11 @@ builds on, including ones that use different words for the same idea.
    OpenAlex's related works to fill the list, so treat it as a weaker lead.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,
    including its DOI and arXiv id, and its most-cited references (where a
-   paper comes from). `list_citing_papers`
+   paper comes from). `list_references` lists all of them (Paper Nexus
+   stores up to 600), most cited, newest or earliest first, and takes
+   `filters` and a year span like `list_citing_papers` below; for the
+   references closest to the paper's own work, prefer step 2 with the
+   paper as the origin and as `cited_by`. `list_citing_papers`
    lists the papers citing it, newest or most cited first (where
    a paper went next), and takes the same `filters` (years are `year_from`
    and `year_to`) to list only the citing papers by an author, in a venue or
