@@ -22,7 +22,7 @@ connected:
 | `search_papers` | Every account | Lookups |
 | `recommend_papers` | Every account | The allowance |
 | `recommend_papers` `filters` | Every account | The allowance |
-| `get_paper` | Every account | Lookups |
+| `get_paper` | Every account | Lookups, one per paper |
 | `list_references` | Every account | Lookups |
 | `list_references` `filters` | Every account | Lookups |
 | `get_usage` | Every account | Lookups |
@@ -156,12 +156,14 @@ stores, so its filters don't have this limit.
 
 ## `get_paper`
 
-One paper's details, subject and keywords, and its most-cited references.
+One paper's details, subject and keywords, and its most-cited references, or
+several papers' in one call.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `paper` | string, required | A Paper Nexus id or link |
-| `references` | integer | How many references to list, most cited first: 0–50, default 10 |
+| `paper` | string | A Paper Nexus id or link. Pass this or `papers`. |
+| `papers` | array of strings | Instead of `paper`: up to 20 ids or links, read in one call and returned in this order |
+| `references` | integer | How many references to list for each paper, most cited first: 0–50, default 10. Pass 0 when you need only the papers' own details. |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the references only; the paper itself always comes back whole. |
 
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
@@ -171,6 +173,13 @@ Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
 Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,
 and isn't saved to your history.
+
+With `papers`, it returns `papers` instead: each paper found, in the order
+given, with its own `references` and `references_indexed`, and `not_found`,
+the ids that aren't Paper Nexus papers. It is an error only when none of them
+is a paper. Each paper uses a lookup, so 20 papers use 20; a call that needs
+more than you have left uses one and returns none, and `get_usage` says how
+many are left.
 
 `subject` is OpenAlex's `domain`, `field` and `subfield` for the paper's main
 topic, such as Physical Sciences, Computer Science and Artificial

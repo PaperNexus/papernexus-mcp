@@ -42,7 +42,10 @@ builds on, including ones that use different words for the same idea.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,
    including its DOI and arXiv id, its subject (OpenAlex's domain, field
    and subfield) and keywords, and its most-cited references (where a
-   paper comes from). `list_references` lists all of them (Paper Nexus
+   paper comes from). To read several papers, pass them together as
+   `papers` (up to 20, one lookup each) rather than calling it once per
+   paper, with `references: 0` when their details are enough.
+   `list_references` lists all of a paper's references (Paper Nexus
    stores up to 600), most cited, newest or earliest first, and takes
    `filters` and a year span like `list_citing_papers` below; for the
    references closest to the paper's own work, prefer step 2 with the
@@ -79,7 +82,8 @@ how many are left and plan within them.
 - **Filters** work on every account, and a filtered call counts like any other.
 - **Lookups:** the other tools share 100 calls a day (free) or 1,000
   (Premium), and every tool a limit of 30 calls a minute, so don't loop over
-  `get_paper` for a long list when `fields` on one listing gives what you need.
+  `get_paper`: pass several as `papers`, or use `fields` on one listing when it
+  gives what you need.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.
