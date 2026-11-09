@@ -41,8 +41,9 @@ builds on, including ones that use different words for the same idea.
    OpenAlex's related works to fill the list, so treat it as a weaker lead.
 3. **Go deeper where it helps.** `get_paper` gives one paper's details,
    including its DOI and arXiv id, its subject (OpenAlex's domain, field
-   and subfield) and keywords, and its most-cited references (where a
-   paper comes from). To read several papers, pass them together as
+   and subfield) and keywords, Semantic Scholar's one-sentence summary
+   (`tldr`), a PDF link where one is known (`pdf_url`), and its most-cited
+   references (where a paper comes from). To read several papers, pass them together as
    `papers` (up to 20, one lookup each) rather than calling it once per
    paper, with `references: 0` when their details are enough.
    `list_references` lists all of a paper's references (Paper Nexus
@@ -100,4 +101,7 @@ rather than retrying.
 - Don't present the order as a relevance score or a measure of importance. It
   orders one list by citation linkage and, without filters, lifts recent
   papers and damps very highly cited ones.
-- Paper Nexus has metadata, not full text. For a paper's content, link to it.
+- Paper Nexus has metadata, not full text. For a paper's content, link to it,
+  or to its `pdf_url` when there is one.
+- Don't present `tldr` as the paper's abstract or quote it as the authors'
+  words: it is a machine-written summary, and a few belong to another paper.

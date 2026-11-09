@@ -156,8 +156,8 @@ stores, so its filters don't have this limit.
 
 ## `get_paper`
 
-One paper's details, subject and keywords, and its most-cited references, or
-several papers' in one call.
+One paper's details, subject, keywords, summary and PDF link, and its
+most-cited references, or several papers' in one call.
 
 | Argument | Type | Notes |
 |---|---|---|
@@ -168,7 +168,7 @@ several papers' in one call.
 
 Returns `paper` (`id`, `title`, `authors`, `year`, `venue`, `type`, `doi`,
 `arxiv_id`, `cited_by_count`, `reference_count`, `open_access`, `subject`,
-`keywords`, `url`, `graph_url`),
+`keywords`, `tldr`, `pdf_url`, `url`, `graph_url`),
 `references`, and `references_indexed` (how many of its references are papers
 in Paper Nexus). Each reference has the same fields as a recommendation. Paper
 Nexus keeps a paper's first five authors. It uses a lookup, not the allowance,
@@ -186,6 +186,12 @@ topic, such as Physical Sciences, Computer Science and Artificial
 Intelligence, or null when it isn't known. `keywords` lists up to five of
 OpenAlex's keywords for the paper, best first. Both come from OpenAlex, so a
 paper that only Semantic Scholar knows has neither.
+
+`tldr` is Semantic Scholar's one-sentence, machine-written summary of the
+paper, and the text labels it as theirs. It isn't the abstract, and a small
+number belong to a different paper, so treat it as a lead, not a quotation.
+`pdf_url` is the first known link to the paper's PDF. Each is null when there
+isn't one.
 
 For all of a paper's references, sorted, by year or filtered, use
 [`list_references`](#list_references).
