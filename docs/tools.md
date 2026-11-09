@@ -19,7 +19,7 @@ connected:
 
 | Tool | Available to | Counts against |
 |---|---|---|
-| `search_papers` | Every account | Lookups |
+| `search_papers` | Every account | Lookups, one per query |
 | `recommend_papers` | Every account | The allowance |
 | `recommend_papers` `filters` | Every account | The allowance |
 | `get_paper` | Every account | Lookups, one per paper |
@@ -36,12 +36,14 @@ tool answers with an error naming the limit and when it resets. See
 
 ## `search_papers`
 
-Find papers by title and get their Paper Nexus ids.
+Find papers by title and get their Paper Nexus ids, one search or several in
+one call.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `query` | string, required | A title or part of one, a DOI, or a link to a paper (doi.org, arXiv, PubMed, publisher pages). At most 512 characters. |
-| `limit` | integer | 1–20, default 10 |
+| `query` | string | A title or part of one, a DOI, or a link to a paper (doi.org, arXiv, PubMed, publisher pages). At most 512 characters. Pass this or `queries`. |
+| `queries` | array of strings | Instead of `query`: up to 20 titles, DOIs or links, such as a reference list, each searched on its own |
+| `limit` | integer | 1–20, default 10. With `queries`, per query: 1–5, default 3. |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `doi`, `cited_by_count`, `url` |
 
 Returns `results`: up to `limit` papers, best match first, each with `id`,
@@ -51,6 +53,14 @@ calls. When nothing
 matched every word of the query, the nearest titles come back with
 `closest_matches: true`. `too_broad`, `timed_out` and `unread_link` explain an
 empty or partial answer.
+
+With `queries`, it returns `searches` instead: one entry a query, in the order
+given, with its `query` and the fields above. A query that couldn't be
+searched has empty `results` and an `error`: `refused` (the text says why),
+`unavailable` (try it again), or `not_run`, when the call ran out of time
+before reaching it. Each query uses a lookup, except a `not_run` one, which
+gets its lookup back. A call that needs more lookups than you have left uses
+one and searches nothing.
 
 ## `recommend_papers`
 

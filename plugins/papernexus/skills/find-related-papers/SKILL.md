@@ -17,6 +17,8 @@ builds on, including ones that use different words for the same idea.
    page). Pick the result whose title, year and authors match what the user
    means. If `closest_matches` is true, nothing matched every word: check the
    titles before going on, and ask the user when two or more could be the one.
+   For several papers at once, such as a reference list, pass them together
+   as `queries` (up to 20, one lookup each) rather than searching one by one.
 2. **Get recommendations.** Call `recommend_papers` with one or more ids.
    Several origins merge their related papers, with papers related to more
    than one of them first. Origins from unrelated fields give a mix of each
@@ -83,8 +85,8 @@ how many are left and plan within them.
 - **Filters** work on every account, and a filtered call counts like any other.
 - **Lookups:** the other tools share 100 calls a day (free) or 1,000
   (Premium), and every tool a limit of 30 calls a minute, so don't loop over
-  `get_paper`: pass several as `papers`, or use `fields` on one listing when it
-  gives what you need.
+  `search_papers` or `get_paper`: pass several as `queries` or `papers`, or use
+  `fields` on one listing when it gives what you need.
 
 So search and confirm the right paper before recommending, rather than
 recommending from a guess. A call that fails or finds nothing isn't counted.

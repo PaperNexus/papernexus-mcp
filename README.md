@@ -136,8 +136,9 @@ is read-only.
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against your allowance.
-The other tools share a larger daily limit of lookups (`get_paper` uses one
-per paper it reads), and every tool a limit of 30 calls a minute.
+The other tools share a larger daily limit of lookups (`search_papers` and
+`get_paper` use one per query or paper), and every tool a limit of 30 calls a
+minute.
 `get_usage` tells your assistant how many calls are left.
 
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
