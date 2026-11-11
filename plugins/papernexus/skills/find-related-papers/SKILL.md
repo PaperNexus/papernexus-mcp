@@ -12,9 +12,12 @@ builds on, including ones that use different words for the same idea.
 
 ## Workflow
 
-1. **Find the paper's id.** Call `search_papers` with the title (or part of
-   it), a DOI, or a link to the paper (doi.org, arXiv, PubMed, a publisher
-   page). Pick the result whose title, year and authors match what the user
+1. **Find the paper's id.** If you have the paper's DOI, arXiv id, PMID,
+   PMCID or OpenAlex id, skip this step: every tool takes those directly, and
+   the result's `identifiers` says which Paper Nexus id each was read as (or
+   lists it in `unresolved` when Paper Nexus doesn't have it). Otherwise call
+   `search_papers` with the title (or part of it), or a link to the paper (a
+   publisher page). Pick the result whose title, year and authors match what the user
    means. If `closest_matches` is true, nothing matched every word: check the
    titles before going on, and ask the user when two or more could be the one.
    For several papers at once, such as a reference list, pass them together

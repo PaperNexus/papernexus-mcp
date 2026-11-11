@@ -71,8 +71,8 @@
             {
               "description": "A set number of recommendations from a DOI.",
               "prompt": "Give me 5 papers to read around doi:10.1038/nature14539, with links.",
-              "tools_triggered": "search_papers, recommend_papers",
-              "expected_behavior": "search_papers with the DOI finds \"Deep Learning\" by LeCun, Bengio and Hinton (Nature, 2015). recommend_papers with limit 5 returns five papers, such as \"Learning Deep Architectures for AI\" and \"A Fast Learning Algorithm for Deep Belief Nets\", each with a papernex.us link."
+              "tools_triggered": "recommend_papers (search_papers optional)",
+              "expected_behavior": "recommend_papers takes the DOI directly and reads it as \"Deep Learning\" by LeCun, Bengio and Hinton (Nature, 2015); the assistant may look it up with search_papers first. With limit 5 it returns five papers, such as \"Learning Deep Architectures for AI\" and \"A Fast Learning Algorithm for Deep Belief Nets\", each with a papernex.us link."
             }
           ],
           "negative": [

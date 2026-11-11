@@ -3,8 +3,20 @@
 Every tool is read-only: it never changes your papers, your library or
 anything outside Paper Nexus. Each result comes back two ways: a short text
 list for the model, and the same data as structured content. A paper id is a
-6-character Paper Nexus id such as `0Bwo97`; wherever a tool takes one, a
-`papernex.us/paper/<id>` link works too.
+6-character Paper Nexus id such as `0Bwo97`. Wherever a tool takes one, a
+`papernex.us/paper/<id>` link works too, and so does the paper's DOI (bare,
+`doi:` or a doi.org link), arXiv id or link, PMID or PubMed link, PMCID, or
+OpenAlex id (`W…`) or link. So an assistant given a DOI can go straight to
+`recommend_papers` without searching first.
+
+When you name papers that way, the result adds `identifiers`: `read_as` maps
+each identifier you passed to its Paper Nexus id, and `unresolved` lists those
+no Paper Nexus paper has. One that names no paper is left out of a list of
+papers (`recommend_papers`' `papers`, `get_paper`'s `papers`). The call fails
+with `not_found` when it is the only paper, a tool's single `paper`, or a
+filter's paper, since leaving it out would answer a different question. Each
+identifier uses one lookup, on every tool. A 6-character value is always read
+as a Paper Nexus id.
 
 Every tool that lists papers takes `fields`: the names of the paper fields to
 return, such as `["title", "year"]`, to keep a long result short. It cuts each
@@ -74,7 +86,7 @@ topic with `filters.title`.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `papers` | array of strings, required | 1–10 Paper Nexus ids or links. Free accounts combine up to 2. |
+| `papers` | array of strings, required | 1–10 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. Free accounts combine up to 2. |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`, `evidence`. Cuts the origins as well as the recommendations. |
 | `filters` | object | See below |
@@ -171,8 +183,8 @@ most-cited references, or several papers' in one call.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `paper` | string | A Paper Nexus id or link. Pass this or `papers`. |
-| `papers` | array of strings | Instead of `paper`: up to 20 ids or links, read in one call and returned in this order |
+| `paper` | string | A Paper Nexus id or link, or a DOI, arXiv id, PMID, PMCID or OpenAlex id. Pass this or `papers`. |
+| `papers` | array of strings | Instead of `paper`: up to 20 papers, named the same ways, read in one call and returned in this order |
 | `references` | integer | How many references to list for each paper, most cited first: 0–50, default 10. Pass 0 when you need only the papers' own details. |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`. Cuts the references only; the paper itself always comes back whole. |
 
@@ -212,7 +224,7 @@ The papers one paper cites, most cited, newest or earliest first.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `paper` | string, required | A Paper Nexus id or link |
+| `paper` | string, required | A Paper Nexus id or link, or a DOI, arXiv id, PMID, PMCID or OpenAlex id |
 | `sort` | string | `most_cited` (default), `newest` or `oldest` |
 | `year_from`, `year_to` | integer | Only references published in this span |
 | `offset` | integer | 0–1000, default 0 |
@@ -269,7 +281,7 @@ The papers that cite one paper, newest, earliest or most cited first.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `paper` | string, required | A Paper Nexus id or link |
+| `paper` | string, required | A Paper Nexus id or link, or a DOI, arXiv id, PMID, PMCID or OpenAlex id |
 | `sort` | string | `newest` (default), `oldest` or `most_cited` |
 | `year_from`, `year_to` | integer | Only citing papers published in this span |
 | `offset` | integer | 0–1000, default 0 |

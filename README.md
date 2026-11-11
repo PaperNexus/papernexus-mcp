@@ -129,6 +129,8 @@ citation counts, authors, venues, title words, citing or cited papers, open
 access, document types) on every account. Each recommendation says which
 origin papers it is linked to and how, so your assistant can tell you why a
 paper is there.
+Every tool that takes a paper takes its DOI, arXiv id, PMID, PMCID or
+OpenAlex id as well as a Paper Nexus id, so there's no need to search first.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
