@@ -64,10 +64,13 @@ when not known) and `url`, so comparing matches by citations takes no further
 calls. When nothing
 matched every word of the query, the nearest titles come back with
 `closest_matches: true`. `too_broad`, `timed_out` and `unread_link` explain an
-empty or partial answer.
+empty or partial answer. A search that found papers also returns
+`next_step`, a reminder that the ids are something to work with rather than an
+answer, and that `recommend_papers` finds the related work around them.
 
 With `queries`, it returns `searches` instead: one entry a query, in the order
-given, with its `query` and the fields above. A query that couldn't be
+given, with its `query` and the fields above. `next_step` comes once, after the
+last search, when any of them found papers. A query that couldn't be
 searched has empty `results` and an `error`: `refused` (the text says why),
 `unavailable` (try it again), or `not_run`, when the call ran out of time
 before reaching it. Each query uses a lookup, except a `not_run` one, which
