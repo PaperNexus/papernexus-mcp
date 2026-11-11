@@ -99,7 +99,11 @@ rather than retrying.
 ## Don'ts
 
 - Don't invent Paper Nexus ids, titles or citation counts; use what the tools
-  return.
+  return, and cite only papers a tool returned in the conversation.
+- Don't attribute a finding to a paper from its title alone; say when a claim
+  rests on the title or the citation links rather than the paper's text.
+- Don't use `search_papers` as a topic search: it matches titles and author
+  names. For a topic, start from one or two papers on it and recommend.
 - Don't present the results as a complete bibliography. They are the papers
   most connected to the origins in the citation network, most related
   first.

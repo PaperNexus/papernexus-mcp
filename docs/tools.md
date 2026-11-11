@@ -48,8 +48,11 @@ tool answers with an error naming the limit and when it resets. See
 
 ## `search_papers`
 
-Find papers by title and get their Paper Nexus ids, one search or several in
-one call.
+Look up papers by title and get their Paper Nexus ids, one search or several
+in one call. It is a title search, not a topic search: it matches titles and
+author names, so pass a paper's title or a distinctive part of it, a DOI or a
+link, not a description of a subject. For the papers on a topic, look up one or
+two well-known papers on it and pass them to `recommend_papers`.
 
 | Argument | Type | Notes |
 |---|---|---|
@@ -79,8 +82,10 @@ one and searches nothing.
 
 ## `recommend_papers`
 
-Papers related to one or more origin papers, found through their citation
-network: papers cited alongside them, and papers that cite the same work.
+Find the papers related to one or more papers: what to read next, related work
+for a paper, thesis or review, what a reading list is missing, or papers like
+these. They are found through the citation network, so they include related
+work that shares no title words with the origins: papers cited alongside them, and papers that cite the same work.
 Several origins merge their related papers, with papers related to more than
 one of them first. Origins from unrelated fields give a mix of each field's
 papers, not papers bridging them; to keep only papers linked to every origin,
@@ -223,7 +228,8 @@ For all of a paper's references, sorted, by year or filtered, use
 
 ## `list_references`
 
-The papers one paper cites, most cited, newest or earliest first.
+What a paper builds on: the papers it cites, most cited, newest or earliest
+first.
 
 | Argument | Type | Notes |
 |---|---|---|
@@ -280,7 +286,8 @@ text says how long each has left.
 
 ## `list_citing_papers`
 
-The papers that cite one paper, newest, earliest or most cited first.
+What came after a paper: the papers that cite it (follow-up work, replications,
+critiques), newest, earliest or most cited first.
 
 | Argument | Type | Notes |
 |---|---|---|
