@@ -295,33 +295,47 @@ It uses one lookup per paper, not the allowance.
 
 ## `verify_references`
 
-Checks a reference list or a bibliography: is each reference a real paper,
-and are its title, year, first author and DOI right? Use it on references an
-assistant wrote, or to check a manuscript's.
+Checks a reference list or a bibliography: is each reference a real paper and
+the one it names, and where do its title, year, first author and DOI differ
+from Paper Nexus's record of it? Use it on references an assistant wrote, or to
+check a manuscript's.
 
 | Argument | Type | Notes |
 |---|---|---|
 | `references` | array, required | 1–50 references, each a string as written (a formatted reference in any style, a DOI, an arXiv, PubMed or publisher link, or a title) or an object `{title, authors, year, doi}` |
 
-Returns `summary` (how many references came back with each status) and
+Returns `summary` (how many references came back with each status, and
+`with_differences`, how many of those matched have a field that differs) and
 `references`, one per reference in the order given. Each has `input` (the
 reference as given), `status` and `read_as` (what was read from it and looked
-up: `title`, `first_author`, `year` and any identifiers). A reference that was
-matched to a paper also has `matched_by` (the identifier or `title`), `paper`,
-`agrees` (the fields that agree) and `mismatches` (each wrong field as
-`{field, given, paper}`).
+up: `title`, `first_author`, `year` and any identifiers).
 
 | Status | Means |
 |---|---|
-| `verified` | The paper was found, and every field it could check agrees |
-| `mismatch` | The paper was found, but a field is wrong |
+| `found` | The paper the reference names |
+| `conflict` | The reference's parts name different papers, the usual sign of a made-up or garbled reference. `conflict` says why: `identifier_title_differs` (its DOI or other identifier is a paper with another title, and either that title is another paper or nothing else in the reference, its first author or year, backs the identifier) or `author_not_on_paper` (its title is a paper with none of the authors given) |
 | `not_found` | The reference isn't in Paper Nexus |
 | `not_checked` | Nothing in it to look up (`reason: nothing_to_look_up`), or the search ran out of time (`reason: out_of_time`); check it again in a smaller batch |
 
-When a reference's DOI belongs to one paper and its title to another, the
-result is a `mismatch` against the DOI's paper, and `title_matches` names the
-paper the title belongs to. A year one apart is often a preprint and its
-published version.
+The status says only which paper a reference is. How each field compares is
+listed beside it, for a reference matched to a paper, with `matched_by` (the
+identifier or `title`) and `paper`:
+
+- `agrees`: the fields that are the paper's. A title agrees word for word, with
+  case, accents, punctuation, spacing, HTML or LaTeX markup and how Greek
+  letters are written set aside, or with a subtitle one of them leaves out.
+- `differences`: each field that differs, as `{field, given, paper}`, where
+  `paper` is what Paper Nexus records. A title close to the paper's but not its
+  wording carries a note saying so.
+- `notes`: differences that are usually no error, each with a `note`: a year
+  one apart (often a preprint and its published version, or the online and
+  print dates), or a first author who is another of the paper's authors.
+
+Paper Nexus's record can itself be wrong, so treat a difference as a field to
+check at the publisher, not as proof the reference is wrong. When a reference's
+DOI belongs to one paper and its title to another, `title_matches` names the
+paper the title belongs to. A second record of the same work (a translated
+title, with the same first author and year) doesn't count as another paper.
 
 Free-text references are read by pattern, not by a full citation parser, so
 if `read_as` shows a misread reference, pass it again as fields. `not_found`
