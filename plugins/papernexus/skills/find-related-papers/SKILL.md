@@ -64,7 +64,9 @@ builds on, including ones that use different words for the same idea.
    filter.
 4. **Answer with links.** Every paper in a result has a papernex.us `url`; give
    it beside each paper you mention, and give `graph_url` so the user can open
-   the whole graph in Paper Nexus and explore it visually.
+   the whole graph in Paper Nexus and explore it visually. Some apps also
+   draw the result as a graph card in the conversation; you can't tell whether
+   yours did, so give the links either way and don't describe the picture.
 
 When you only need some details of each paper, say titles and years to scan
 a long list, pass `fields`: the result stays short,

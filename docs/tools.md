@@ -109,6 +109,19 @@ than `limit`: the list is its top papers. Each paper has `id`, `title`, `authors
 `url`, and each recommendation also has `evidence`. The graph is also saved to
 your Paper Nexus history.
 
+**Graph card.** In an app that implements MCP Apps (the
+`io.modelcontextprotocol/ui` extension), the result is also drawn as a citation
+graph in the conversation. The tool names the view in `_meta.ui.resourceUri`
+(`ui://papernexus/graph-card-v1.html`, read with `resources/read`), and the
+result's `_meta["us.papernex/graph"]` carries what it draws: the `papers` the
+result lists, origins first, the `citations` among them as `[citing, cited]`
+pairs of positions in that list, each paper's strongest `similar` links, and
+`graph_url`. An app keeps `_meta` out of the model's context, so the card costs
+the assistant nothing, and `fields` doesn't cut it. Inline the card is a still
+picture with "Expand graph" and "Open in Paper Nexus"; expanded, choosing a
+paper shows its details and a link to it. Apps without the extension ignore
+all of this and show the text.
+
 The order weighs how strongly each paper is linked to the origins through
 citations, over a sample of the citing papers and references of a widely
 cited origin. Without filters, it also damps very highly cited papers and

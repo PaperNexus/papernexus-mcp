@@ -137,6 +137,12 @@ Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
 is read-only.
 
+In apps that show MCP Apps views, such as Claude on the web, `recommend_papers`
+also draws its result as a citation graph in the conversation: your paper in
+the middle, the related papers around it, coloured by year, with the citations
+among them. It expands to an interactive view with the list of papers, and
+opens the whole graph on papernex.us. Other apps show the same result as text.
+
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against your allowance.
