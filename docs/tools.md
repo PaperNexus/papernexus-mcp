@@ -37,6 +37,7 @@ connected:
 | `get_paper` | Every account | Lookups, one per paper |
 | `list_references` | Every account | Lookups |
 | `list_references` `filters` | Every account | Lookups |
+| `export_citations` | Every account | Lookups, one per paper |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
@@ -267,6 +268,29 @@ To find the references most closely tied to a paper's own work, rather than
 all of them by date or citation count, call `recommend_papers` with the paper
 as the origin and as `filters.cited_by`. Most cited first ranks by citations
 alone, so it is led by widely cited papers it may cite in passing.
+
+## `export_citations`
+
+Papers as citations for a reference manager or a bibliography: BibTeX, RIS
+(Zotero, Mendeley, EndNote) or CSL-JSON (Zotero, pandoc, citeproc). The
+entries are the same as the ones the Paper Nexus site exports.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `papers` | array of strings, required | 1–50 Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids |
+| `format` | string | `bibtex` (default), `ris` or `csl-json` |
+
+Returns `format`, `content` (the whole file, in the order given), `entries`
+(each paper's `id`, `citation_key` and `url`), `not_found` (ids that aren't
+Paper Nexus papers, left out) and `authors_may_be_cut`.
+
+The citation key is the paper's Paper Nexus id, with a `P` in front when it
+starts with a digit. Each entry has the title, authors, year, venue, volume,
+issue and pages where known, the DOI and other ids, and links. Nothing is
+filled in that Paper Nexus doesn't have, so check the entries before you
+submit a manuscript. Paper Nexus keeps the first five authors of a paper, and
+`authors_may_be_cut` lists the papers with five stored, which may have more.
+It uses one lookup per paper, not the allowance.
 
 ## `get_usage`
 
