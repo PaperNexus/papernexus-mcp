@@ -38,6 +38,7 @@ connected:
 | `list_references` | Every account | Lookups |
 | `list_references` `filters` | Every account | Lookups |
 | `export_citations` | Every account | Lookups, one per paper |
+| `verify_references` | Every account | Lookups, one per reference |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
@@ -291,6 +292,42 @@ filled in that Paper Nexus doesn't have, so check the entries before you
 submit a manuscript. Paper Nexus keeps the first five authors of a paper, and
 `authors_may_be_cut` lists the papers with five stored, which may have more.
 It uses one lookup per paper, not the allowance.
+
+## `verify_references`
+
+Checks a reference list or a bibliography: is each reference a real paper,
+and are its title, year, first author and DOI right? Use it on references an
+assistant wrote, or to check a manuscript's.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `references` | array, required | 1–50 references, each a string as written (a formatted reference in any style, a DOI, an arXiv, PubMed or publisher link, or a title) or an object `{title, authors, year, doi}` |
+
+Returns `summary` (how many references came back with each status) and
+`references`, one per reference in the order given. Each has `input` (the
+reference as given), `status` and `read_as` (what was read from it and looked
+up: `title`, `first_author`, `year` and any identifiers). A reference that was
+matched to a paper also has `matched_by` (the identifier or `title`), `paper`,
+`agrees` (the fields that agree) and `mismatches` (each wrong field as
+`{field, given, paper}`).
+
+| Status | Means |
+|---|---|
+| `verified` | The paper was found, and every field it could check agrees |
+| `mismatch` | The paper was found, but a field is wrong |
+| `not_found` | The reference isn't in Paper Nexus |
+| `not_checked` | Nothing in it to look up (`reason: nothing_to_look_up`), or the search ran out of time (`reason: out_of_time`); check it again in a smaller batch |
+
+When a reference's DOI belongs to one paper and its title to another, the
+result is a `mismatch` against the DOI's paper, and `title_matches` names the
+paper the title belongs to. A year one apart is often a preprint and its
+published version.
+
+Free-text references are read by pattern, not by a full citation parser, so
+if `read_as` shows a misread reference, pass it again as fields. `not_found`
+means not in Paper Nexus, which holds papers with citation data, not every
+publication, so it is not proof that a reference was made up. Volume, issue and
+pages are not checked. It uses one lookup per reference, not the allowance.
 
 ## `get_usage`
 

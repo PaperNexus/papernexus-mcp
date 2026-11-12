@@ -121,6 +121,7 @@ on.
 | `get_paper` | One paper's details, subject, keywords, summary, PDF link and most-cited references |
 | `list_references` | The papers one paper cites, sorted, by year or filtered |
 | `export_citations` | Up to 50 papers as BibTeX, RIS or CSL-JSON, for your reference manager |
+| `verify_references` | Checks up to 50 references: is each a real paper, and are its title, year, first author and DOI right |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
 | `list_citing_papers` | The papers citing one paper |
@@ -140,8 +141,9 @@ is read-only.
 
 `recommend_papers` and `list_citing_papers` count against your allowance.
 The other tools share a larger daily limit of lookups (`search_papers`,
-`get_paper` and `export_citations` use one per query or paper), and every tool
-a limit of 30 calls a minute.
+`get_paper` and `export_citations` use one per query or paper, and
+`verify_references` one per reference), and every tool a limit of 30 calls a
+minute.
 `get_usage` tells your assistant how many calls are left.
 
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
