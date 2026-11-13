@@ -2,7 +2,7 @@
   "name": "papernexus",
   "displayName": "Paper Nexus",
   "version": "1.1.0",
-  "description": "Find related scientific papers through their citation network: search the scholarly literature, get recommendations from one or more papers, read a paper's references and citing papers, and browse your Paper Nexus library.",
+  "description": "Find related scientific papers through their citation network: search the scholarly literature, get recommendations from one or more papers, read a paper's references and citing papers, check a reference list, export citations, and browse your Paper Nexus library. Adds skills for finding related papers, checking references, building a bibliography and finding what a reference list is missing.",
   "author": {
     "name": "Paper Nexus",
     "email": "info@papernex.us",

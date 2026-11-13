@@ -52,8 +52,15 @@ the URL `https://papernex.us/mcp`, then **Connect** and sign in.
 claude mcp add --transport http papernexus https://papernex.us/mcp
 ```
 
-Or install the plugin, which adds a skill that teaches Claude a
-literature-search workflow with these tools:
+Or install the plugin, which adds the server and four skills that teach
+Claude how to work with these tools:
+
+| Skill | Use it to |
+|---|---|
+| `find-related-papers` | Find the papers related to ones you name: literature reviews, what to read next, work that builds on a paper |
+| `check-references` | Check a reference list or `.bib` file: is each reference a real paper, and are its title, year, first author and DOI right? |
+| `build-bibliography` | Get BibTeX, RIS or CSL-JSON for papers, from Paper Nexus's records rather than the assistant's memory |
+| `find-missing-papers` | Find what a draft's references, a reading list or a library collection is missing |
 
 ```bash
 claude plugin marketplace add PaperNexus/papernexus-mcp

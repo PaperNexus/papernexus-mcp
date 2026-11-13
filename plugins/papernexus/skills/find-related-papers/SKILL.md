@@ -1,6 +1,6 @@
 ---
 name: find-related-papers
-description: Find scientific papers related to ones the user names, through their citation network, with the Paper Nexus tools. Use for literature reviews, "what else should I read", finding work that builds on a paper, or checking a paper's references and citing papers.
+description: Find scientific papers related to ones the user names, through their citation network, with the Paper Nexus tools. Use for literature reviews, "what else should I read", finding work that builds on a paper, or reading a paper's references and citing papers.
 ---
 
 # Find related papers with Paper Nexus
