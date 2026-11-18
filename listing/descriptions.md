@@ -36,6 +36,8 @@ assistant to:
   one of them first.
 - **Read a paper's details**, list its references, and see the papers that
   cite it.
+- **See how a set of papers connect**: which of them cite which, for up to
+  100 papers in one call.
 - **See why each paper is recommended**: which of your papers it is linked
   to, and whether it cites them or they cite it.
 - **Narrow recommendations, references and citing papers with filters**: years,
@@ -100,5 +102,8 @@ on the consent page).
 
 ## Tool annotations
 
-Every tool is marked `readOnlyHint: true`, `destructiveHint: false`,
-`idempotentHint: true`, `openWorldHint: false`, and every tool has a title.
+Every tool has a title. Every tool but one is marked `readOnlyHint: true`,
+`destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`.
+The exception is `submit_feedback`, which sends the Paper Nexus team a note and
+changes nothing else: `readOnlyHint: false`, `destructiveHint: false`,
+`idempotentHint: false`, `openWorldHint: false`.

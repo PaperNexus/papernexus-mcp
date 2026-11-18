@@ -61,7 +61,9 @@ builds on, including ones that use different words for the same idea.
    and `year_to`) to list only the citing papers by an author, in a venue or
    with a word in the title. Most cited first is led by famous papers that
    cite it in passing, so for the citers that matter, prefer step 2's `cites`
-   filter.
+   filter. To say how a set of papers connect, such as the recommendations
+   or a reading list, call `get_citation_edges` with them (2 to 100, one
+   lookup each): it returns which of them cite which, in one call.
 4. **Answer with links.** Every paper in a result has a papernex.us `url`; give
    it beside each paper you mention, and give `graph_url` so the user can open
    the whole graph in Paper Nexus and explore it visually. Some apps also
@@ -71,6 +73,13 @@ builds on, including ones that use different words for the same idea.
 When you only need some details of each paper, say titles and years to scan
 a long list, pass `fields`: the result stays short,
 and every paper still carries its id for the next call.
+
+When a result looks wrong (a title, author, year or DOI that is off, a
+record that is really another paper, citations that don't fit) or a tool
+fails, `submit_feedback` tells the Paper Nexus team: say what you expected
+and what came back, pass the papers it is about, and tell the user what you
+sent. Leave out personal details. It doesn't change the result, so carry on
+with what the tools returned.
 
 If the user allowed library access when connecting (`list_library` is
 listed), their collections are a good source of origin papers: "find what I'm

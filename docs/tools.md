@@ -1,7 +1,8 @@
 # Tool reference
 
-Every tool is read-only: it never changes your papers, your library or
-anything outside Paper Nexus. Each result comes back two ways: a short text
+Every tool but `submit_feedback` is read-only: none of them changes your
+papers, your library or anything outside Paper Nexus. `submit_feedback` only
+sends the Paper Nexus team a note. Each result comes back two ways: a short text
 list for the model, and the same data as structured content. A paper id is a
 6-character Paper Nexus id such as `0Bwo97`. Wherever a tool takes one, a
 `papernex.us/paper/<id>` link works too, and so does the paper's DOI (bare,
@@ -37,15 +38,19 @@ connected:
 | `get_paper` | Every account | Lookups, one per paper |
 | `list_references` | Every account | Lookups |
 | `list_references` `filters` | Every account | Lookups |
+| `get_citation_edges` | Every account | Lookups, one per paper |
 | `export_citations` | Every account | Lookups, one per paper |
 | `verify_references` | Every account | Lookups, one per reference |
 | `get_usage` | Every account | Lookups |
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
+| `submit_feedback` | Every account | Its own limit of 10 notes a day |
 
-Every call also counts toward a limit of 30 calls a minute. Past a limit, the
-tool answers with an error naming the limit and when it resets. See
+Every call also counts toward a limit of 30 calls a minute, and at most 4 of
+an account's searches run at once (see [`search_papers`](#search_papers)).
+Past a limit, the tool answers with an error naming the limit and when it
+resets. See
 [Allowance](../README.md#allowance) for the limits.
 
 ## `search_papers`
@@ -78,9 +83,17 @@ given, with its `query` and the fields above. `next_step` comes once, after the
 last search, when any of them found papers. A query that couldn't be
 searched has empty `results` and an `error`: `refused` (the text says why),
 `unavailable` (try it again), or `not_run`, when the call ran out of time
-before reaching it. Each query uses a lookup, except a `not_run` one, which
+before reaching it, because the searches ahead of it were slow or the
+account's other searches were still running. Each query uses a lookup, except a `not_run` one, which
 gets its lookup back. A call that needs more lookups than you have left uses
 one and searches nothing.
+
+At most 4 of an account's searches run at once, across all its calls, and
+each query of a `queries` batch is one search. A search that can't start
+within 15 seconds isn't run, and its lookup is given back: in a batch it is
+`not_run`, and a single search answers with the error `searches_busy`. Pass
+several titles as one call's `queries` rather than as several calls at the
+same time.
 
 ## `recommend_papers`
 
@@ -110,17 +123,28 @@ than `limit`: the list is its top papers. Each paper has `id`, `title`, `authors
 your Paper Nexus history.
 
 **Graph card.** In an app that implements MCP Apps (the
-`io.modelcontextprotocol/ui` extension), the result is also drawn as a citation
-graph in the conversation. The tool names the view in `_meta.ui.resourceUri`
-(`ui://papernexus/graph-card-v1.html`, read with `resources/read`), and the
-result's `_meta["us.papernex/graph"]` carries what it draws: the `papers` the
-result lists, origins first, the `citations` among them as `[citing, cited]`
-pairs of positions in that list, each paper's strongest `similar` links, and
-`graph_url`. An app keeps `_meta` out of the model's context, so the card costs
-the assistant nothing, and `fields` doesn't cut it. Inline the card is a still
-picture with "Expand graph" and "Open in Paper Nexus"; expanded, choosing a
-paper shows its details and a link to it. Apps without the extension ignore
-all of this and show the text.
+`io.modelcontextprotocol/ui` extension), the result is also drawn in the
+conversation as the graph Paper Nexus shows at `graph_url`: the same papers and
+the same links. The tool names the view in `_meta.ui.resourceUri`
+(`ui://papernexus/graph-card-v2.html`, read with `resources/read`; the earlier
+`-v1` uri is still read, and answered with the current page). The result's
+`_meta["us.papernex/graph"]` carries what it draws:
+
+| Field | Meaning |
+|---|---|
+| `papers` | Every paper in the graph, not only the `limit` the result lists: the origins, then the listed recommendations in their order, then the rest by rank, up to 200. Each has `id`, `title`, `year`, `cited_by_count`, `url`, the first `author`, `more_authors`, and `origin` on an origin. |
+| `edges` | The similarity links Paper Nexus draws and lays the graph out by, as `[position, position, weight]` in `papers` |
+| `citations` | The citations among the papers, as `[citing, cited]` positions in `papers` |
+| `graph_url` | The result's own |
+| `total` | Only when the graph holds more than 200 papers: how many it holds |
+| `filtered` | `true` on a filtered result |
+
+An app keeps `_meta` out of the model's context, so the card costs the
+assistant nothing, and `fields` doesn't cut it. Inline the card is a still
+picture with "Expand graph" and "Open in Paper Nexus". Expanded, it switches
+between the similarity and citation links, and choosing a paper shows its
+details and a link to it. Apps without the extension ignore all of this and
+show the text.
 
 The order weighs how strongly each paper is linked to the origins through
 citations, over a sample of the citing papers and references of a widely
@@ -240,6 +264,42 @@ isn't one.
 
 For all of a paper's references, sorted, by year or filtered, use
 [`list_references`](#list_references).
+
+## `get_citation_edges`
+
+How a set of papers connect: which of them cite which. Pass the papers you
+already have, such as a `recommend_papers` result, a reading list or a library
+collection, and get the citations among them in one call, instead of reading
+each paper's references and comparing the lists.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `papers` | array of strings, required | 2–100 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids |
+| `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `url` |
+
+Returns `papers` (each paper found, in the order given, with `id`, `title`,
+`authors` (the first three), `year` and `url`, plus `cites` and `cited_by`: how
+many of the other papers it cites and is cited by), `edges` (each citation
+between two of the papers, as `{citing, cited}` ids), `edge_count`, `unlinked`
+(the papers that cite none of the others and that none of them cites),
+`not_found` (ids that aren't Paper Nexus papers, left out), `complete` and
+`unchecked`. It returns only the citations between the papers given, not each
+paper's whole reference list; for that, use
+[`list_references`](#list_references).
+
+A citation is found from either side: from the citing paper's references, or
+from the cited paper's citing papers. Paper Nexus stores up to 600 references
+and 1,000 citing papers a paper, so for a pair where the citing paper has more
+references than that and the cited paper more citing papers, neither list may
+hold the other. That pair is listed in `unchecked` (as `{citing, cited}`) and
+`complete` is false.
+
+The links come from reference lists (OpenAlex and Semantic Scholar), which are
+incomplete: a link missing is not proof that one paper doesn't cite the other,
+and a citation alone doesn't show that one paper builds on the other. Each
+paper uses a lookup, so 100 papers use 100; a call that needs more than you
+have left uses one and returns none. It is an error when fewer than two of the
+papers are Paper Nexus papers, since there is nothing to compare.
 
 ## `list_references`
 
@@ -368,9 +428,40 @@ Returns `checked_at` (the report's time, in UTC), `tier` (`free` or
 is open, and the next counted call opens one) and
 `counted_tools` (the counted tools your account sees), plus `lookups` (`limit`,
 `used`, `remaining`, `resets_at` and `tools`, the daily limit the other tools
-share) and `calls_per_minute`. Each window starts at its first call, not at
+share), `calls_per_minute` and `feedback` (`limit`, `used`, `remaining` and
+`resets_at` of `submit_feedback`'s own daily limit). Each window starts at its first call, not at
 midnight, so the allowance and the lookups can reset at different times; the
 text says how long each has left.
+
+## `submit_feedback`
+
+Sends the Paper Nexus team a short note about the service: data that is wrong
+(a title, author list, year, venue, DOI, link, citation or reference, or a
+record that is really a different paper), a paper, field or source that is
+missing, an error or timeout, a tool description or result that was confusing,
+or a feature you wished for. An assistant sends one when you ask it to, or when
+it notices a problem with a result, and tells you what it sent.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `category` | string, required | `wrong_data`, `missing_data`, `bug`, `feature_request`, `tool_usability` or `other` |
+| `message` | string, required | What happened, what was expected and what came back: 10–2,000 characters |
+| `papers` | array of strings | Up to 10 papers the note is about, as Paper Nexus ids or links, DOIs, arXiv ids or titles, up to 256 characters each. They are kept as written, not looked up. |
+| `tool` | string | The Paper Nexus tool the note is about, if one is |
+
+Returns `received`, `feedback_id` (the note's reference), `category` and
+`remaining_today`. The note changes no result now and gets no reply in the
+conversation. Control characters and characters that reorder or hide text are
+removed before it is stored.
+
+It is the one tool that isn't read-only, and its annotations say so
+(`readOnlyHint: false`), so an app that asks before running such a tool asks
+you before a note is sent. It doesn't use the allowance or lookups: every
+account may send 10 notes a rolling day, and `get_usage` reports them as
+`feedback`. Past that it answers with the error `feedback_limit`. A note that
+couldn't be stored, or whose arguments were wrong, isn't counted. The
+assistant is asked to leave out personal details and your own text beyond what
+the report needs.
 
 ## `list_citing_papers`
 

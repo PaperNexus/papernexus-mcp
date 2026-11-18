@@ -127,11 +127,13 @@ on.
 | `recommend_papers` | Papers related to one or more papers through their citation network |
 | `get_paper` | One paper's details, subject, keywords, summary, PDF link and most-cited references |
 | `list_references` | The papers one paper cites, sorted, by year or filtered |
+| `get_citation_edges` | Which of up to 100 papers cite which: the citations among them |
 | `export_citations` | Up to 50 papers as BibTeX, RIS or CSL-JSON, for your reference manager |
 | `verify_references` | Checks up to 50 references: is each a real paper and the one it names, and where do its title, year, first author and DOI differ from Paper Nexus's record |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
 | `list_citing_papers` | The papers citing one paper |
+| `submit_feedback` | Sends the Paper Nexus team a note about wrong or missing data, an error, or a confusing tool |
 
 `recommend_papers`, `list_references` and `list_citing_papers` also take filters (years,
 citation counts, authors, venues, title words, citing or cited papers, open
@@ -142,21 +144,22 @@ Every tool that takes a paper takes its DOI, arXiv id, PMID, PMCID or
 OpenAlex id as well as a Paper Nexus id, so there's no need to search first.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
-is read-only.
+but `submit_feedback` is read-only, and that one only sends a note.
 
 In apps that show MCP Apps views, such as Claude on the web, `recommend_papers`
-also draws its result as a citation graph in the conversation: your paper in
-the middle, the related papers around it, coloured by year, with the citations
-among them. It expands to an interactive view with the list of papers, and
-opens the whole graph on papernex.us. Other apps show the same result as text.
+also draws its result in the conversation as the graph Paper Nexus shows for
+it: your paper in the middle, the related papers around it, coloured by year.
+It expands to an interactive view with the list of papers and a switch between
+similarity and citation links, and opens the same graph on papernex.us. Other
+apps show the same result as text.
 
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against your allowance.
 The other tools share a larger daily limit of lookups (`search_papers`,
-`get_paper` and `export_citations` use one per query or paper, and
-`verify_references` one per reference), and every tool a limit of 30 calls a
-minute.
+`get_paper`, `get_citation_edges` and `export_citations` use one per query or
+paper, and `verify_references` one per reference), and every tool a limit of
+30 calls a minute. `submit_feedback` has its own limit of 10 notes a day.
 `get_usage` tells your assistant how many calls are left.
 
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
@@ -176,6 +179,10 @@ that fails or finds nothing isn't counted. See
 - Paper Nexus never sees your conversation, only the tool calls your assistant
   makes. Recommendation requests are saved to your Paper Nexus history, as on
   the site.
+- `submit_feedback` sends the Paper Nexus team a note your assistant writes,
+  when you ask it to or when it finds a problem with a result. It is marked as
+  a tool that isn't read-only, so apps that ask before running one ask you
+  first.
 - You can see and revoke connected apps in Paper Nexus under Account settings
   → AI assistants.
 
