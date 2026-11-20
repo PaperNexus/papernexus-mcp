@@ -386,7 +386,7 @@ up: `title`, `first_author`, `year` and any identifiers).
 | Status | Means |
 |---|---|
 | `found` | The paper the reference names |
-| `conflict` | The reference's parts name different papers, the usual sign of a made-up or garbled reference. `conflict` says why: `identifier_title_differs` (its DOI or other identifier is a paper with another title, and either that title is another paper or nothing else in the reference, its first author or year, backs the identifier) or `author_not_on_paper` (its title is a paper with none of the authors given) |
+| `conflict` | The reference's parts name different papers, the usual sign of a made-up or garbled reference. `conflict` says why: `identifier_title_differs` (its DOI or other identifier is a paper with another title, and either that title is another paper or nothing else in the reference, its first author or year, backs the identifier) or `author_not_on_paper` (its title is a paper that does not list the reference's first author) |
 | `not_found` | The reference isn't in Paper Nexus |
 | `not_checked` | Nothing in it to look up (`reason: nothing_to_look_up`), or the search ran out of time (`reason: out_of_time`); check it again in a smaller batch |
 
