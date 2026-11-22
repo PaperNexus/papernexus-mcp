@@ -20,7 +20,7 @@ and to proofread a manuscript's list.
    parts (a BibTeX entry, say), pass an object `{title, authors, year, doi}`
    instead, which can't be misread.
 2. **Call `verify_references`** with up to 50 at a time, in the order given.
-   Each reference uses one lookup (100 a day on a free account, 1,000 on
+   Each reference uses one lookup (100 a day on a free account, 5,000 on
    Premium), so for a long list call `get_usage` first, and say so when the
    list won't fit rather than checking part of it silently.
 3. **Read each result by its `status`:**

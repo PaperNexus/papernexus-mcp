@@ -165,7 +165,7 @@ paper, and `verify_references` one per reference), and every tool a limit of
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
 |---|---|---|---|
 | Free | 10 a week | 100 a day | up to 2 |
-| Premium | 200 a day | 1,000 a day | up to 10 |
+| Premium | 200 a day | 5,000 a day | up to 10 |
 
 A filtered call is counted like any other. A recommendation or citing list
 that fails or finds nothing isn't counted. See

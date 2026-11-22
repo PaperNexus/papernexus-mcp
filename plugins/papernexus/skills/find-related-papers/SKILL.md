@@ -97,7 +97,7 @@ how many are left and plan within them.
   recommendation.
 - **Premium:** 200 counted calls a day and up to 10 origin papers.
 - **Filters** work on every account, and a filtered call counts like any other.
-- **Lookups:** the other tools share 100 calls a day (free) or 1,000
+- **Lookups:** the other tools share 100 calls a day (free) or 5,000
   (Premium), and each tool has a limit of 30 calls a minute, so don't loop over
   `search_papers` or `get_paper`: pass several as `queries` or `papers`, or use
   `fields` on one listing when it gives what you need.
