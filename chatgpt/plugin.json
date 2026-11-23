@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "papernexus",
-  "version": "1.2.1",
-  "description": "Find related scientific papers through their citation network: search the scholarly literature, get recommendations from one or more papers, read a paper's references and citing papers, and browse your Paper Nexus library.",
+  "version": "1.3.0",
+  "description": "Find related scientific papers through their citation network: search the scholarly literature, get recommendations from one or more papers, read a paper's references and citing papers, and browse your Paper Nexus library and save papers to it.",
   "author": {
     "name": "Paper Nexus",
     "email": "info@papernex.us",
@@ -17,7 +17,7 @@
       "interface": {
         "displayName": "Paper Nexus",
         "shortDescription": "Find related scientific papers",
-        "longDescription": "Paper Nexus maps the scientific literature by its citations, using the scholarly works in OpenAlex and Semantic Scholar. Find a paper by its title, a DOI or a link; get the papers related to one paper or several through the citation network, each with the citation links that put it there; read a paper's details and list its references; see the papers that cite it; narrow recommendations, references and citing papers with filters (years, citations, authors, venues, title words, citing or cited papers, open access); and browse your Paper Nexus library, if you allow it. Every paper links to papernex.us, and every set of recommendations comes with a link to the whole citation graph.\n\nIt is for researchers, students and librarians who are starting a literature review, checking references, or looking for what to read next.\n\nLimitations: Paper Nexus holds papers' metadata and the citations between them, not their full text. A paper with few or no citation links gets few or no related papers. Each account has a limit on recommendation and citing-paper lookups, and get_usage shows what is left.\n\nSign in with your Paper Nexus account, or create one when you connect.",
+        "longDescription": "Paper Nexus maps the scientific literature by its citations, using the scholarly works in OpenAlex and Semantic Scholar. Find a paper by its title, a DOI or a link; get the papers related to one paper or several through the citation network, each with the citation links that put it there; read a paper's details and list its references; see the papers that cite it; narrow recommendations, references and citing papers with filters (years, citations, authors, venues, title words, citing or cited papers, open access); and browse your Paper Nexus library and save papers to it, if you allow it. Every paper links to papernex.us, and every set of recommendations comes with a link to the whole citation graph.\n\nIt is for researchers, students and librarians who are starting a literature review, checking references, or looking for what to read next.\n\nLimitations: Paper Nexus holds papers' metadata and the citations between them, not their full text. A paper with few or no citation links gets few or no related papers. Each account has a limit on recommendation and citing-paper lookups, and get_usage shows what is left.\n\nSign in with your Paper Nexus account, or create one when you connect.",
         "developerName": "Paper Nexus",
         "category": "Education & Research",
         "capabilities": [
@@ -26,7 +26,7 @@
           "Read a paper's details and references",
           "List the papers citing a paper",
           "Filter recommendations, references and citing papers",
-          "Read your Paper Nexus library"
+          "Read your Paper Nexus library and save papers to it"
         ],
         "websiteURL": "https://papernex.us",
         "supportURL": "https://papernex.us/contact",

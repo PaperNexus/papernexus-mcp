@@ -3,7 +3,7 @@
   "name": "us.papernex/papernexus",
   "title": "Paper Nexus",
   "description": "Find related scientific papers through their citation network, from OpenAlex and Semantic Scholar.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "websiteUrl": "https://papernex.us",
   "repository": {
     "url": "https://github.com/PaperNexus/papernexus-mcp",

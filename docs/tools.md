@@ -1,8 +1,10 @@
 # Tool reference
 
-Every tool but `submit_feedback` is read-only: none of them changes your
-papers, your library or anything outside Paper Nexus. `submit_feedback` only
-sends the Paper Nexus team a note. Each result comes back two ways: a short text
+Every tool but `submit_feedback` and `add_to_library` is read-only: none of
+them changes your papers, your library or anything outside Paper Nexus.
+`submit_feedback` only sends the Paper Nexus team a note, and `add_to_library`
+only adds papers and collections to your library, never removing or moving
+anything. Each result comes back two ways: a short text
 list for the model, and the same data as structured content. A paper id is a
 6-character Paper Nexus id such as `0Bwo97`. Wherever a tool takes one, a
 `papernex.us/paper/<id>` link works too, and so does the paper's DOI (bare,
@@ -45,6 +47,7 @@ connected:
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
+| `add_to_library` | Every account, when you allow "Add papers to your library" while connecting | Lookups, one per paper |
 | `submit_feedback` | Every account | Its own limit of 10 notes a day |
 
 Every call also counts toward a limit of 30 calls a minute, and at most 4 of
@@ -109,7 +112,7 @@ topic with `filters.title`.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `papers` | array of strings, required | 1–10 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. Free accounts combine up to 2. |
+| `papers` | array of strings, required | 1–100 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. Free accounts combine up to 10. With `filters`, up to 10 on every account. |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`, `evidence`. Cuts the origins as well as the recommendations. |
 | `filters` | object | See below |
@@ -179,8 +182,9 @@ link". Author names are given first name first.
 
 ### Filters
 
-With `filters`, every recommended paper passes all the filters given. A
-filtered call is counted like any other. The search goes deeper than plain recommendations to fill the list, so
+With `filters`, every recommended paper passes all the filters given, and the
+call takes up to 10 origins on every account. A filtered call is counted like
+any other. The search goes deeper than plain recommendations to fill the list, so
 pass filters here rather than filtering the results yourself.
 
 | Filter | Type | Notes |
@@ -454,7 +458,8 @@ Returns `received`, `feedback_id` (the note's reference), `category` and
 conversation. Control characters and characters that reorder or hide text are
 removed before it is stored.
 
-It is the one tool that isn't read-only, and its annotations say so
+It is one of the two tools that aren't read-only (with
+[`add_to_library`](#add_to_library)), and its annotations say so
 (`readOnlyHint: false`), so an app that asks before running such a tool asks
 you before a note is sent. It doesn't use the allowance or lookups: every
 account may send 10 notes a rolling day, and `get_usage` reports them as
@@ -527,3 +532,42 @@ it is `monitored` for new citing papers. With a
 collection, only the papers directly in it are listed, not those in its
 subcollections. A paper you imported that matched nothing in Paper Nexus has a
 null `id`.
+
+## `add_to_library`
+
+Save papers to your own Paper Nexus library, optionally into collections, so
+you can find them on papernex.us later. Offered only when you allowed "Add
+papers to your library" while connecting. Your assistant should save papers
+only when you ask it to. It only adds: a paper already saved is put into the
+collections named as well, and nothing is ever removed or moved.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `papers` | array of strings, required | 1–50 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. For a paper known only by its title, find it with `search_papers` first. |
+| `collections` | array of strings | Up to 20 collections to put every paper in: a name, a path such as "Thesis / Methods", or an id from `list_library`. Leave it out to save the papers without a collection. |
+| `create_missing` | boolean | Default false. When true, collections that don't exist yet (and the parents in a path) are created, up to 5 a call; when false, a collection that doesn't exist fails the call. |
+
+Returns `summary` (how many papers came back with each status), `papers`
+(each one's `id`, `title`, `status`, `reason` where there is one, the paths of
+the `collections` it is in now, and `url`), `collections` (each one's `id`,
+`name`, `path`, whether it is `monitored`, whether this call `created` it,
+and `url`), `limit` (the cap that stopped the call, if one did) and
+`library_url`.
+
+| Status | Means |
+|---|---|
+| `added` | Saved by this call |
+| `already_saved` | It was in your library already; it is now in the collections named too. `reason: conflict` means it was changing elsewhere and wasn't put into them: call again with it |
+| `not_found` | No Paper Nexus paper has this id |
+| `not_added` | Not saved. `reason` says why: `limit` (the library is full), `unprocessed` (out of time: call again with it) or `folder_missing` (a collection was deleted while saving) |
+
+A library holds up to 50 papers in 5 collections on a free account, and 5,000
+papers in 200 collections on Premium. Collections nest up to 8 levels deep.
+Nothing is saved when a collection named doesn't exist (without
+`create_missing`), when the new collections would pass the cap, or when the
+library is full; the paper cap can also stop a call partway, which the result
+says paper by paper. The papers' metadata is saved with them, as when you
+save a paper on the site.
+
+Its annotations are `readOnlyHint: false`, `destructiveHint: false` and
+`idempotentHint: true`: saving a paper twice changes nothing more.

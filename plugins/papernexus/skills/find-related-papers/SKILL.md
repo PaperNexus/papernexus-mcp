@@ -84,7 +84,8 @@ with what the tools returned.
 If the user allowed library access when connecting (`list_library` is
 listed), their collections are a good source of origin papers: "find what I'm
 missing for my thesis chapter" means list that collection, then recommend from
-its papers.
+its papers. If `add_to_library` is listed, it saves papers there (into a
+collection, which it can create), but only when the user asks to save them.
 
 ## Allowance
 
@@ -93,10 +94,11 @@ allowance; the other tools don't. Before a task that needs many counted calls,
 such as recommending from every paper in a collection, call `get_usage` to see
 how many are left and plan within them.
 
-- **Free accounts:** 10 counted calls a week, and up to 2 origin papers per
+- **Free accounts:** 10 counted calls a week, and up to 10 origin papers per
   recommendation.
-- **Premium:** 200 counted calls a day and up to 10 origin papers.
-- **Filters** work on every account, and a filtered call counts like any other.
+- **Premium:** 200 counted calls a day and up to 100 origin papers.
+- **Filters** work on every account, and a filtered call counts like any other
+  and takes up to 10 origins.
 - **Lookups:** the other tools share 100 calls a day (free) or 5,000
   (Premium), and each tool has a limit of 30 calls a minute, so don't loop over
   `search_papers` or `get_paper`: pass several as `queries` or `papers`, or use

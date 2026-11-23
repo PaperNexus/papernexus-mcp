@@ -132,6 +132,7 @@ on.
 | `verify_references` | Checks up to 50 references: is each a real paper and the one it names, and where do its title, year, first author and DOI differ from Paper Nexus's record |
 | `get_usage` | How many counted calls your account has left |
 | `list_library` | Your Paper Nexus library, if you allow "Read your library" when connecting |
+| `add_to_library` | Saves papers to your library, into collections it can create, if you allow "Add papers to your library" when connecting |
 | `list_citing_papers` | The papers citing one paper |
 | `submit_feedback` | Sends the Paper Nexus team a note about wrong or missing data, an error, or a confusing tool |
 
@@ -144,7 +145,8 @@ Every tool that takes a paper takes its DOI, arXiv id, PMID, PMCID or
 OpenAlex id as well as a Paper Nexus id, so there's no need to search first.
 Every tool that lists papers takes `fields`, to return only the details you
 need, such as titles and years. Arguments and results are in the [tool reference](docs/tools.md). Every tool
-but `submit_feedback` is read-only, and that one only sends a note.
+but `submit_feedback` and `add_to_library` is read-only: the first only sends
+a note, and the second only adds papers and collections to your library.
 
 In apps that show MCP Apps views, such as Claude on the web, `recommend_papers`
 also draws its result in the conversation as the graph Paper Nexus shows for
@@ -157,28 +159,33 @@ apps show the same result as text.
 
 `recommend_papers` and `list_citing_papers` count against your allowance.
 The other tools share a larger daily limit of lookups (`search_papers`,
-`get_paper`, `get_citation_edges` and `export_citations` use one per query or
-paper, and `verify_references` one per reference), and every tool a limit of
+`get_paper`, `get_citation_edges`, `export_citations` and `add_to_library` use
+one per query or paper, and `verify_references` one per reference), and every tool a limit of
 30 calls a minute. `submit_feedback` has its own limit of 10 notes a day.
 `get_usage` tells your assistant how many calls are left.
 
 | Plan | Counted calls | Lookups | Origin papers per recommendation |
 |---|---|---|---|
-| Free | 10 a week | 100 a day | up to 2 |
-| Premium | 200 a day | 5,000 a day | up to 10 |
+| Free | 10 a week | 100 a day | up to 10 |
+| Premium | 200 a day | 5,000 a day | up to 100 |
 
-A filtered call is counted like any other. A recommendation or citing list
+A filtered call is counted like any other, and takes up to 10 origin papers
+on every plan. A recommendation or citing list
 that fails or finds nothing isn't counted. See
 [pricing](https://papernex.us/pricing) for Premium.
 
 ## Privacy and access
 
 - Connecting asks for your permission on a Paper Nexus page that names the app
-  and where it will send you back. Library access is asked for separately and
-  is read-only.
+  and where it will send you back. Library access is asked for separately:
+  reading your library, and adding papers and collections to it, are two
+  separate permissions. Neither can remove or move anything.
 - Paper Nexus never sees your conversation, only the tool calls your assistant
   makes. Recommendation requests are saved to your Paper Nexus history, as on
   the site.
+- `add_to_library` saves papers to your library only with the "Add papers to
+  your library" permission. If you connected before it existed, reconnect to
+  grant it.
 - `submit_feedback` sends the Paper Nexus team a note your assistant writes,
   when you ask it to or when it finds a problem with a result. It is marked as
   a tool that isn't read-only, so apps that ask before running one ask you

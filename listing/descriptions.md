@@ -45,11 +45,13 @@ assistant to:
   access and document types.
 - **Browse your Paper Nexus library**, if you allow it, and find what your
   collections are missing.
+- **Save papers to your library**, into collections it can create, if you
+  allow it. It only adds, never removes or moves.
 
 Every paper links to papernex.us, and every set of recommendations comes with
 a link that opens the whole citation graph there. Sign in with a free Paper
 Nexus account: 10 counted calls a week (recommendations and citing-paper
-lists), no API key. Premium has 200 a day and up to 10 papers per request.
+lists), no API key. Premium has 200 a day and up to 100 papers per request.
 
 ## Example prompts
 
@@ -97,13 +99,15 @@ OAuth 2.1 with PKCE. Discovery through
 `https://papernex.us/.well-known/oauth-protected-resource/mcp` and
 `https://papernex.us/.well-known/oauth-authorization-server`. Clients may use a
 Client ID Metadata Document or dynamic client registration. Scopes:
-`papers:read` (always granted) and `library:read` (optional, shown separately
-on the consent page).
+`papers:read` (always granted), `library:read` and `library:write` (each
+optional, shown separately on the consent page).
 
 ## Tool annotations
 
-Every tool has a title. Every tool but one is marked `readOnlyHint: true`,
+Every tool has a title. Every tool but two is marked `readOnlyHint: true`,
 `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`.
-The exception is `submit_feedback`, which sends the Paper Nexus team a note and
-changes nothing else: `readOnlyHint: false`, `destructiveHint: false`,
-`idempotentHint: false`, `openWorldHint: false`.
+The exceptions are `submit_feedback`, which sends the Paper Nexus team a note and
+changes nothing else (`readOnlyHint: false`, `destructiveHint: false`,
+`idempotentHint: false`, `openWorldHint: false`), and `add_to_library`, which
+only adds papers and collections to the user's library (`readOnlyHint: false`,
+`destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`).

@@ -23,8 +23,8 @@ work.
    have" set. Say which references Paper Nexus doesn't have, since they can't
    be origins and can't be recognised in results.
 2. **Check the budget.** Call `get_usage`. `recommend_papers` is counted (10
-   calls a week on a free account, 200 a day on Premium) and takes up to 2
-   origins per call on a free account, 10 on Premium. Plan the calls before
+   calls a week on a free account, 200 a day on Premium) and takes up to 10
+   origins per call on a free account, 100 on Premium (10 with `filters`). Plan the calls before
    making any, and tell the user the plan when it uses most of what is left.
 3. **Choose origins by topic, not by fame.** Group the list into its themes
    (the chapter's sections, or the clusters you can see in titles and
