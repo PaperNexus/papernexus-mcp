@@ -43,7 +43,7 @@ connected:
 | `get_citation_edges` | Every account | Lookups, one per paper |
 | `export_citations` | Every account | Lookups, one per paper |
 | `verify_references` | Every account | Lookups, one per reference |
-| `get_usage` | Every account | Lookups |
+| `get_usage` | Every account | Neither, only the calls a minute |
 | `list_citing_papers` | Every account | The allowance |
 | `list_citing_papers` `filters` | Every account | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
@@ -424,7 +424,8 @@ pages are not checked. It uses one lookup per reference, not the allowance.
 
 How many calls your account has left. Call it before a task that needs many
 calls, to plan within the limits instead of running into them. It takes no
-arguments. It isn't counted against the allowance, but it uses one lookup.
+arguments. It uses neither the allowance nor a lookup, only one of the calls a
+minute, so it still answers once the lookups for the day are used up.
 
 Returns `checked_at` (the report's time, in UTC), `tier` (`free` or
 `premium`), `usage_period` (`weekly` or `daily`), `limit`, `used`,
