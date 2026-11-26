@@ -47,6 +47,11 @@ assistant to:
   collections are missing.
 - **Save papers to your library**, into collections it can create, if you
   allow it. It only adds, never removes or moves.
+- **Reorganise your library**, if you allow that separately: move and remove
+  papers, and rename, move and delete collections.
+- **Order and group the results your way**: the most central papers in the
+  graph, reviews or recent work, the graph's top authors and venues, and
+  without the papers you have already read or saved.
 
 Every paper links to papernex.us, and every set of recommendations comes with
 a link that opens the whole citation graph there. Sign in with a free Paper
@@ -99,15 +104,20 @@ OAuth 2.1 with PKCE. Discovery through
 `https://papernex.us/.well-known/oauth-protected-resource/mcp` and
 `https://papernex.us/.well-known/oauth-authorization-server`. Clients may use a
 Client ID Metadata Document or dynamic client registration. Scopes:
-`papers:read` (always granted), `library:read` and `library:write` (each
-optional, shown separately on the consent page).
+`papers:read` (always granted), `library:read`, `library:write` and
+`library:manage` (each optional, shown separately on the consent page;
+`library:manage` includes reading the library).
 
 ## Tool annotations
 
-Every tool has a title. Every tool but two is marked `readOnlyHint: true`,
+Every tool has a title. Every tool but six is marked `readOnlyHint: true`,
 `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`.
 The exceptions are `submit_feedback`, which sends the Paper Nexus team a note and
 changes nothing else (`readOnlyHint: false`, `destructiveHint: false`,
-`idempotentHint: false`, `openWorldHint: false`), and `add_to_library`, which
+`idempotentHint: false`, `openWorldHint: false`); `add_to_library`, which
 only adds papers and collections to the user's library (`readOnlyHint: false`,
-`destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`).
+`destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`); and
+`move_papers`, `remove_from_library`, `update_collection` and
+`delete_collection`, which change the user's library and are offered only with
+`library:manage` (`readOnlyHint: false`, `destructiveHint: true`,
+`idempotentHint: true`, `openWorldHint: false`).

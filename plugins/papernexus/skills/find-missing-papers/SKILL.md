@@ -22,6 +22,9 @@ work.
    not its subcollections). Keep every resolved id: that is the "already
    have" set. Say which references Paper Nexus doesn't have, since they can't
    be origins and can't be recognised in results.
+   For a whole collection on one theme, `recommend_papers` with the
+   collection as `collection` and `exclude_library: true` uses its papers as
+   origins and leaves out everything already saved, in one call.
 2. **Check the budget.** Call `get_usage`. `recommend_papers` is counted (10
    calls a week on a free account, 200 a day on Premium) and takes up to 10
    origins per call on a free account, 100 on Premium (10 with `filters`). Plan the calls before
@@ -35,13 +38,17 @@ work.
    Ask the user which themes matter most when the budget can't cover all.
 4. **Recommend, with the user's constraints as `filters`.** "Recent work I
    missed" is `year_min`; "the classics" is `min_citations`; reviews are
-   `types: ["review"]`. Ask for `limit` 50 when most results will be papers
-   already in the list, and `fields` of `id`, `title`, `authors`, `year`,
-   `cited_by_count`, `url` and `evidence` to keep long results short.
-5. **Remove what they already have.** Drop every result whose id is in the
-   "already have" set, and treat a result with the same title and first
-   author as one of theirs too (a preprint and its published version are
-   often separate records). What is left are the candidates.
+   `types: ["review"]`. Pass the "already have" ids as `exclude` (up to 200;
+   Paper Nexus ids cost no lookups), or `exclude_library: true` for a
+   library collection, so the list fills with papers they don't have. Use
+   `fields` of `id`, `title`, `authors`, `year`, `cited_by_count`, `url` and
+   `evidence` to keep long results short.
+5. **Check what is left against what they have.** `exclude` matches ids, so
+   still treat a result with the same title and first author as one of
+   theirs (a preprint and its published version are often separate
+   records). What is left are the candidates. When the list is shorter than
+   `limit`, the result says why: the graph around those origins holds few
+   papers they don't already have.
 6. **Rank the candidates by evidence.** Put first the papers that came back
    for several themes or are linked to several origins (`linked_origins`),
    and those with many co-citations and shared references (`link_counts`).

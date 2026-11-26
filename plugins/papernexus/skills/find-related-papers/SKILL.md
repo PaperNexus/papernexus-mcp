@@ -37,6 +37,12 @@ builds on, including ones that use different words for the same idea.
    empty or short list as the whole answer.
    For "the work that builds on X", pass X as the origin and as `cites`: the
    papers citing X, closest to it first.
+   The default order is by link strength. For "the key papers", "surveys" or
+   "recent work", pass `rank_by` `important` (central to this graph, not a
+   measure of quality), `reviews` or `recent`; for who works on it and where
+   it is published, `group_by: ["authors", "venues"]`. Pass papers the user
+   has already read as `exclude`: the list fills from further down the graph.
+   When the list is shorter than `limit`, the result says why: pass that on.
    Each recommendation's `evidence` says which origins it is linked to
    (`linked_origins`), whether it cites them or they cite it, and how many
    co-citations and shared references link it (`link_counts`). Use it to say
@@ -83,9 +89,14 @@ with what the tools returned.
 
 If the user allowed library access when connecting (`list_library` is
 listed), their collections are a good source of origin papers: "find what I'm
-missing for my thesis chapter" means list that collection, then recommend from
-its papers. If `add_to_library` is listed, it saves papers there (into a
-collection, which it can create), but only when the user asks to save them.
+missing for my thesis chapter" is one `recommend_papers` call with the
+collection as `collection` and `exclude_library: true`, which leaves out what
+they have saved already. If `add_to_library` is listed, it saves papers there
+(into a collection, which it can create), but only when the user asks to save
+them. If `move_papers`, `remove_from_library`, `update_collection` and
+`delete_collection` are listed, they reorganise the library, again only when
+the user asks: there is no trash, so say what will be removed or deleted
+before doing it.
 
 ## Allowance
 
@@ -100,7 +111,8 @@ how many are left and plan within them.
 - **Filters** work on every account, and a filtered call counts like any other
   and takes up to 10 origins.
 - **Lookups:** the other tools share 100 calls a day (free) or 5,000
-  (Premium), and each tool has a limit of 30 calls a minute, so don't loop over
+  (Premium), and each tool has a limit of 60 calls a minute on Premium and
+  30 on a free account, so don't loop over
   `search_papers` or `get_paper`: pass several as `queries` or `papers`, or use
   `fields` on one listing when it gives what you need.
 

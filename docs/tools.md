@@ -1,10 +1,13 @@
 # Tool reference
 
-Every tool but `submit_feedback` and `add_to_library` is read-only: none of
-them changes your papers, your library or anything outside Paper Nexus.
-`submit_feedback` only sends the Paper Nexus team a note, and `add_to_library`
-only adds papers and collections to your library, never removing or moving
-anything. Each result comes back two ways: a short text
+Every tool but `submit_feedback` and the five that change your library is
+read-only: none of them changes your papers, your library or anything outside
+Paper Nexus. `submit_feedback` only sends the Paper Nexus team a note.
+`add_to_library` only adds papers and collections to your library, never
+removing or moving anything. `move_papers`, `remove_from_library`,
+`update_collection` and `delete_collection` move and remove papers and rename,
+move and delete collections, and are offered only when you allow that
+separately. Each result comes back two ways: a short text
 list for the model, and the same data as structured content. A paper id is a
 6-character Paper Nexus id such as `0Bwo97`. Wherever a tool takes one, a
 `papernex.us/paper/<id>` link works too, and so does the paper's DOI (bare,
@@ -37,6 +40,7 @@ connected:
 | `search_papers` | Every account | Lookups, one per query |
 | `recommend_papers` | Every account | The allowance |
 | `recommend_papers` `filters` | Every account | The allowance |
+| `recommend_papers` `collection`, `exclude_library` | Every account, when you allow "Read your library" while connecting | The allowance |
 | `get_paper` | Every account | Lookups, one per paper |
 | `list_references` | Every account | Lookups |
 | `list_references` `filters` | Every account | Lookups |
@@ -48,9 +52,14 @@ connected:
 | `list_citing_papers` `filters` | Every account | The allowance |
 | `list_library` | Every account, when you allow "Read your library" while connecting | Lookups |
 | `add_to_library` | Every account, when you allow "Add papers to your library" while connecting | Lookups, one per paper |
+| `move_papers` | Every account, when you allow "Move and remove papers, and rename, move and delete collections" while connecting | Lookups, one per paper |
+| `remove_from_library` | Every account, when you allow "Move and remove papers, and rename, move and delete collections" while connecting | Lookups, one per paper |
+| `update_collection` | Every account, when you allow "Move and remove papers, and rename, move and delete collections" while connecting | Lookups |
+| `delete_collection` | Every account, when you allow "Move and remove papers, and rename, move and delete collections" while connecting | Lookups |
 | `submit_feedback` | Every account | Its own limit of 10 notes a day |
 
-Every call also counts toward a limit of 30 calls a minute, and at most 4 of
+Every call also counts toward a limit of calls a minute, 60 on Premium and 30
+on a free account, and at most 4 of
 an account's searches run at once (see [`search_papers`](#search_papers)).
 Past a limit, the tool answers with an error naming the limit and when it
 resets. See
@@ -112,10 +121,15 @@ topic with `filters.title`.
 
 | Argument | Type | Notes |
 |---|---|---|
-| `papers` | array of strings, required | 1–100 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. Free accounts combine up to 10. With `filters`, up to 10 on every account. |
+| `papers` | array of strings, required unless `collection` is given | 1–100 papers: Paper Nexus ids or links, or DOIs, arXiv ids, PMIDs, PMCIDs or OpenAlex ids. Free accounts combine up to 10. With `filters`, up to 10 on every account. |
 | `limit` | integer | 1–50, default 25 |
 | `fields` | array of strings | Any of `id`, `title`, `authors`, `year`, `venue`, `doi`, `cited_by_count`, `open_access`, `url`, `evidence`. Cuts the origins as well as the recommendations. |
-| `filters` | object | See below |
+| `filters` | object | See [Filters](#filters) |
+| `rank_by` | string | `related` (default), `important`, `reviews` or `recent`. See [Other orders](#other-orders). |
+| `group_by` | array of strings | `authors`, `venues` or both: also list the graph's top 10 of each. See [Groups](#groups). |
+| `exclude` | array of strings | Up to 200 papers to leave out of the list, such as ones already read. See [Leaving papers out](#leaving-papers-out). |
+| `collection` | string | Only when you allowed "Read your library": a collection's name, path ("Thesis / Methods") or id, whose papers are origins too. See [From a library collection](#from-a-library-collection). |
+| `exclude_library` | boolean | Only when you allowed "Read your library": leave every paper in your library out of the list. Default false. |
 
 Returns `origins` (the papers you passed), `recommendations`, most related
 first, `not_found` (ids that aren't Paper Nexus papers), and `graph_url`, which
@@ -123,7 +137,8 @@ opens the whole graph on papernex.us. That graph usually holds more papers
 than `limit`: the list is its top papers. Each paper has `id`, `title`, `authors`
 (the first three), `year`, `venue`, `doi`, `cited_by_count`, `open_access` and
 `url`, and each recommendation also has `evidence`. The graph is also saved to
-your Paper Nexus history.
+your Paper Nexus history. The arguments below add `rank_by`,
+`ranked_by_citations`, `groups`, `excluded` and `collection` to the result.
 
 **Graph card.** In an app that implements MCP Apps (the
 `io.modelcontextprotocol/ui` extension), the result is also drawn in the
@@ -155,6 +170,71 @@ cited origin. Without filters, it also damps very highly cited papers and
 lifts recent ones. It orders this one list: it isn't a probability of
 relevance or a measure of a paper's importance.
 
+### Other orders
+
+`rank_by` orders the graph's papers another way before the list is cut to
+`limit`. The graph and `graph_url` stay the same.
+
+| `rank_by` | Order |
+|---|---|
+| `related` | The default: how strongly each paper is linked to the origins |
+| `important` | By PageRank over the citations among the graph's papers, so the papers this set of papers builds on come first. That is central *to this graph*, which for one origin is about 50 papers, not to the field, and it isn't a measure of quality. |
+| `reviews` | Citing the most papers of the graph, as surveys do |
+| `recent` | Only papers from the current calendar year and the two before it, by importance; undated papers are left out |
+
+Ties, common in a small graph whose papers barely cite each other, keep the
+related order. With an order other than `related`, each paper's `evidence`
+adds `graph_citations` (`cited_by` and `cites`: how many of the graph's
+papers, origins included, cite it and it cites), and the result has `rank_by`.
+When the citations among the graph's papers can't order the listed papers,
+the list stays in the related order, the text says why, and the result has
+`ranked_by_citations: false`. A graph with few recent papers gives a short
+`recent` list, and the text says how many it holds. With `filters`, only the
+papers the filtered search found are re-ordered, so for recent work
+`filters.year_min` does better: it searches for them.
+
+### Groups
+
+`group_by` adds `groups`, with `authors`, `venues` or both: the 10 with the
+most of the graph's papers (origins aside), each with `name`, `papers` (how
+many are theirs), `cited_in_graph` (citations those papers have from the
+graph's papers) and `ids` (up to five of them, most related first). Authors
+are merged by surname and initials, so "G. Hinton" and "Geoffrey Hinton" are
+one. Paper Nexus keeps a paper's first five authors, so later authors are
+undercounted. Groups describe the whole graph: `exclude` and `recent` don't
+narrow them.
+
+### Leaving papers out
+
+`exclude` (up to 200 papers) and `exclude_library` leave papers out of the
+list before it is cut to `limit`, so it fills from further down the graph.
+The graph at `graph_url`, and the graph card, still show them, and origins
+stay origins. A one-origin graph holds about 50 papers, so heavy overlap can
+leave a short list, and the text says so. Paper Nexus ids in `exclude` cost
+nothing; each paper named by DOI or another identifier uses a lookup, and one
+that names no paper is listed in `identifiers.unresolved` without failing the
+call.
+
+The result adds `excluded`: `left_out` (papers of the graph left out of the
+list), `given` (papers named in `exclude`), `library` (whether
+`exclude_library` was set) and, with it, `library_papers` (papers in the
+library). A list that exclusion empties is still counted. With `filters`, a
+call whose exclusions remove papers searches a step deeper (25, 50 or 100
+papers) so it has papers to fill from.
+
+### From a library collection
+
+With "Read your library" allowed, `collection` names one of your collections:
+the papers directly in it (not those in collections inside it) are origins
+too, after any `papers`, which you can then leave out. With
+`exclude_library: true` as well, one call answers "what is my reading list
+missing". The result adds `collection`: its `id`, `path` and `url`, `papers`
+(how many of its papers were used as origins) and `unmatched` (imported papers
+not matched to a Paper Nexus paper, left out). A collection that doesn't exist,
+has no matched papers, or holds more than the origin limit (10 on a free
+account, 100 on Premium, 10 with `filters`) is refused, and the call isn't
+counted.
+
 ### Evidence
 
 `evidence` gives the citation links behind a recommendation. It holds only
@@ -168,6 +248,7 @@ doesn't record it:
 | `cited_by` | The origins that cite it |
 | `citation_linked` | Present only as `false`: the paper wasn't found through citations, but added from OpenAlex's related works to fill a short list, after every linked paper |
 | `link_counts` | By origin id, `co_cited` (papers citing both it and the origin) and `shared_references` (references both cite), for the origins with either |
+| `graph_citations` | Only with a `rank_by` other than `related`: `cited_by` and `cites`, the citations between it and the graph's papers that the order rests on |
 
 The counts are taken over what was read for each origin, which each origin in
 `origins` reports as `sampled` (`citing_papers`, `references`). For a widely
@@ -572,3 +653,90 @@ save a paper on the site.
 
 Its annotations are `readOnlyHint: false`, `destructiveHint: false` and
 `idempotentHint: true`: saving a paper twice changes nothing more.
+
+## Changing your library
+
+`move_papers`, `remove_from_library`, `update_collection` and
+`delete_collection` are offered only when you allowed "Move and remove papers,
+and rename, move and delete collections" while connecting. That permission
+includes reading your library, since these tools name collections. Your
+assistant should change your library only when you ask it to. There is no
+trash: a removed paper is gone until it is saved again, and a deleted
+collection can't be restored. Their annotations are `readOnlyHint: false`,
+`destructiveHint: true`, `idempotentHint: true` and `openWorldHint: false`, so
+an app that asks before running a destructive tool asks you first.
+
+Collections are named by name, path ("Thesis / Methods") or id, as in
+`list_library`. Papers are named as everywhere else; an imported paper that
+`list_library` shows with a null `id` can only be moved or removed on
+papernex.us. `move_papers` and `remove_from_library` use a lookup per paper;
+`update_collection` and `delete_collection` use one.
+
+### `move_papers`
+
+Move papers between collections, or take them out of collections. Papers stay
+in the library.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `papers` | array of strings, required | 1–50 papers |
+| `to` | array of strings | Up to 20 collections to put the papers in. Without `from`, each paper leaves every other collection it is in. |
+| `from` | array of strings | Up to 20 collections to take the papers out of. Without `to`, that is all that changes, and a paper in no collection left stays in the library. |
+
+The collections must exist; `add_to_library` with `create_missing` creates
+new ones. Returns `summary` (how many papers came back with each status),
+`papers` (each one's `id`, `title`, `status`, `reason` where there is one, the
+paths of the `collections` it is in now, and `url`), `to` and `from` (each
+collection's `id`, `name`, `path`, `monitored` and `url`) and `library_url`.
+
+| Status | Means |
+|---|---|
+| `moved` | Its collections changed |
+| `unchanged` | It was already where the call would put it |
+| `not_in_library` | It isn't in your library |
+| `not_moved` | `reason` says why: `conflict` (it was changing elsewhere), `unprocessed` (out of time) or `folder_missing` (a collection was deleted while moving). Call again with it. |
+
+### `remove_from_library`
+
+Remove papers from the library, and so from every collection they are in. To
+take a paper out of one collection only, use `move_papers` with `from`.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `papers` | array of strings, required | 1–50 papers |
+
+Returns `summary`, `papers` and `library_url`. Each paper comes back
+`removed`, with the paths of the `collections` it was in, so `add_to_library`
+can put it back; `not_in_library`; or `not_removed` (out of time: call again
+with it).
+
+### `update_collection`
+
+Rename a collection, or move it, with everything in it, inside another
+collection or to the top level.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `collection` | string, required | The collection: a name, path or id |
+| `name` | string | Its new name, up to 100 characters |
+| `parent` | string | The collection to move it inside: a name, path or id |
+| `top_level` | boolean | Move it to the top level of the library |
+
+Pass `name`, `parent` or `top_level: true`, or `name` with one of the other
+two. Returns `collection` (its `id`, `name`, `path`, `monitored` and `url`),
+`previous_path` and `changed` (false when it already had this name and
+place). A collection can't be moved into itself or one of its own
+collections, or deeper than 8 levels.
+
+### `delete_collection`
+
+Delete a collection. Its papers stay in the library; a paper in no other
+collection is left in none.
+
+| Argument | Type | Notes |
+|---|---|---|
+| `collection` | string, required | The collection: a name, path or id |
+| `include_subcollections` | boolean | Default false. A collection with collections inside it is refused unless this is true, which deletes them too. |
+
+Returns `deleted` (each collection deleted, with its `id`, `path` and whether
+it was `monitored`) and `library_url`.
