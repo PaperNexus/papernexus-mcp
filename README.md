@@ -162,6 +162,24 @@ It expands to an interactive view with the list of papers and a switch between
 similarity and citation links, and opens the same graph on papernex.us. Other
 apps show the same result as text.
 
+## Prompts
+
+The server also offers four prompts, which apps show you as commands: in
+claude.ai and Claude Desktop under the connector in the "+" menu, in Claude
+Code as `/mcp__papernexus__<name>`, and in Gemini CLI and VS Code as slash
+commands. Each starts the job with your papers and the steps that keep the
+answer to what the tools returned.
+
+| Prompt | Use it to |
+|---|---|
+| `find_related_papers` | Find papers related to ones you name, optionally with a focus such as recent work or reviews |
+| `check_references` | Check a reference list: is each a real paper, and are its title, year, first author and DOI right? |
+| `build_bibliography` | Get BibTeX, RIS or CSL-JSON for papers or a library collection |
+| `find_missing_papers` | Find what a reference list or library collection is missing |
+
+They match the plugin's skills, for apps that don't take skills. Details are
+in the [tool reference](docs/tools.md#prompts).
+
 ## Allowance
 
 `recommend_papers` and `list_citing_papers` count against your allowance.

@@ -13,7 +13,9 @@ list for the model, and the same data as structured content. A paper id is a
 `papernex.us/paper/<id>` link works too, and so does the paper's DOI (bare,
 `doi:` or a doi.org link), arXiv id or link, PMID or PubMed link, PMCID, or
 OpenAlex id (`W…`) or link. So an assistant given a DOI can go straight to
-`recommend_papers` without searching first.
+`recommend_papers` without searching first. An arXiv DOI
+(`10.48550/arXiv.<id>`) is also looked up as its arXiv id, since a paper
+published after arXiv is recorded under its journal DOI.
 
 When you name papers that way, the result adds `identifiers`: `read_as` maps
 each identifier you passed to its Paper Nexus id, and `unresolved` lists those
@@ -137,8 +139,12 @@ opens the whole graph on papernex.us. That graph usually holds more papers
 than `limit`: the list is its top papers. Each paper has `id`, `title`, `authors`
 (the first three), `year`, `venue`, `doi`, `cited_by_count`, `open_access` and
 `url`, and each recommendation also has `evidence`. The graph is also saved to
-your Paper Nexus history. The arguments below add `rank_by`,
-`ranked_by_citations`, `groups`, `excluded` and `collection` to the result.
+your Paper Nexus history. When the list needs explaining (why it is empty or
+shorter than `limit`, what `exclude` left out, or how papers without a
+citation link got in), `notes` holds the same lines as the text, since some
+apps give the model only the structured content. The arguments below add
+`rank_by`, `ranked_by_citations`, `groups`, `excluded` and `collection` to the
+result.
 
 **Graph card.** In an app that implements MCP Apps (the
 `io.modelcontextprotocol/ui` extension), the result is also drawn in the
@@ -292,7 +298,7 @@ against the filters), `budget_hit` (true when the list is short because the
 search reached the most papers it checks, so more that pass may exist further
 out), `deadline_hit` (the search ran out of time), `matched` (the author and
 venue names each filter matched) and `notes` (why the list is short, if it
-is, and anything else to know).
+is, and anything else to know). The result's own `notes` holds these too.
 
 ### Heavily cited papers
 
@@ -487,7 +493,9 @@ identifier or `title`) and `paper`:
   wording carries a note saying so.
 - `notes`: differences that are usually no error, each with a `note`: a year
   one apart (often a preprint and its published version, or the online and
-  print dates), or a first author who is another of the paper's authors.
+  print dates), a first author who is another of the paper's authors, or an
+  arXiv DOI for a paper found by its arXiv id (right for the preprint; Paper
+  Nexus records the published version's DOI).
 
 Paper Nexus's record can itself be wrong, so treat a difference as a field to
 check at the publisher, not as proof the reference is wrong. When a reference's
@@ -540,8 +548,8 @@ Returns `received`, `feedback_id` (the note's reference), `category` and
 conversation. Control characters and characters that reorder or hide text are
 removed before it is stored.
 
-It is one of the two tools that aren't read-only (with
-[`add_to_library`](#add_to_library)), and its annotations say so
+It isn't read-only, like the [library tools](#add_to_library) that change
+your library, and its annotations say so
 (`readOnlyHint: false`), so an app that asks before running such a tool asks
 you before a note is sent. It doesn't use the allowance or lookups: every
 account may send 10 notes a rolling day, and `get_usage` reports them as
@@ -571,7 +579,9 @@ when not known exactly), `complete`, `sort`, `offset`, and `next_offset` for the
 next page (null on the last one). `total` counts the citing papers Paper Nexus
 holds, so it can be lower than a paper's `cited_by_count`. With `year_from` or
 `year_to`, a year with many citing papers may list only its most cited ones;
-the text names those years, and `complete` is then false.
+the text names those years, and `complete` is then false. When the list is a
+sample (such years, or the filtered sample described below), `notes` says so
+in the same words as the text.
 
 With `filters`, only the citing papers that pass every filter are listed, in
 the same order. They are `recommend_papers`' [filters](#filters) except
@@ -740,3 +750,24 @@ collection is left in none.
 
 Returns `deleted` (each collection deleted, with its `id`, `path` and whether
 it was `monitored`) and `library_url`.
+
+## Prompts
+
+Besides tools, the server offers four prompts. An app shows them to you, not
+the assistant: claude.ai and Claude Desktop in the "+" menu under the
+connector, Claude Code as `/mcp__papernexus__<name>`, Gemini CLI and VS Code
+as slash commands. ChatGPT doesn't show a server's prompts. Choosing one puts
+one message in the conversation: your papers or references, and the steps for
+the job, such as passing identifiers as they are and citing only papers a
+tool returned. They read no paper and use nothing from your allowance or
+lookups; the tools they lead to count as usual.
+
+| Prompt | Arguments | Leads to |
+|---|---|---|
+| `find_related_papers` | `papers` (required): titles, DOIs, arXiv ids or links; `focus`: what you are after, such as recent work, reviews, a method or years | `search_papers`, then `recommend_papers` |
+| `check_references` | `references` (required): the reference list, as written | `verify_references` |
+| `build_bibliography` | `papers` (required): titles, DOIs, arXiv ids, links or a library collection; `format`: `bibtex` (default), `ris` or `csl-json` | `export_citations` |
+| `find_missing_papers` | `references` (required): a reference list, or the name of a library collection | `get_usage`, then `recommend_papers` per theme, with `exclude` |
+
+They are the same for every account, so a step that needs a library tool
+applies only when you allowed it.

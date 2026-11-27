@@ -79,6 +79,14 @@ account.
    is missing.** Reads a collection (with the library permission) and
    recommends from the papers in it.
 
+## Prompts
+
+For forms that ask whether the server offers prompts: yes, four
+(`find_related_papers`, `check_references`, `build_bibliography`,
+`find_missing_papers`), the same jobs as the Claude Code plugin's skills. Each
+takes the user's papers or references as an argument and reads nothing until
+the assistant calls a tool. See [docs/tools.md](../docs/tools.md#prompts).
+
 ## Categories
 
 Research, Education, Science, Productivity (choose whichever the directory offers)
